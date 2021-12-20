@@ -4,7 +4,7 @@ name = "zxibs/wrapperservice"
 
 realm = "shared"
 
-description = "This service allows you to create custom properties for roblox instances, see the documentation for more info: (documentation is not available yet.), github: "
+description = "This service allows you to create custom properties for roblox instances, see the documentation for more info: (documentation is not available yet.), github: https://github.com/zxibs/WrapperService"
 
 registry = "https://github.com/UpliftGames/wally-index"
 
@@ -12,7 +12,10 @@ version = "0.2.0"
 
 license = "MIT"
 
-include = ["src"]
+include = [
+    "src",
+    "default.project.json"
+]
 
 exclude = [
     "debug",
@@ -22,14 +25,14 @@ exclude = [
     ".vscode",
     ".gitignore",
     ".styluaignore",
-    "LICENSE",
+    "test.project.json",
     "README.md",
-    "default.project.json",
+    "LICENSE.md",
+    "wally.toml",
     "roblox.toml",
     "selene.toml",
     "stylua.toml",
     "testez-companion.toml",
-    "wally.toml",
     "wally.lock"
 ]
 

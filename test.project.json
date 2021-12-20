@@ -1,0 +1,28 @@
+{
+    "name": "WrapperService-test",
+    "tree": {
+        "$className": "DataModel",
+
+        "ReplicatedStorage": {
+            "$className": "ReplicatedStorage",
+            "WrapperService": {
+                "$ignoreUnknownInstances": true,
+                "$path": "src"
+            },
+
+            "Tests": {
+                "$ignoreUnknownInstances": true,
+                "$path": "test"
+            }
+        },
+
+        "StarterPlayer": {
+            "$className": "StarterPlayer",
+            "StarterPlayerScripts": {
+                "$className": "StarterPlayerScripts",
+                "$ignoreUnknownInstances": true,
+                "$path": "debug"
+            }
+        }
+    }
+}
