@@ -1,0 +1,37 @@
+[package]
+
+name = "zxibs/wrapperservice"
+
+realm = "shared"
+
+description = "This service allows you to create custom properties for roblox instances, see the documentation for more info: (documentation is not available yet.), github: "
+
+registry = "https://github.com/UpliftGames/wally-index"
+
+version = "0.2.0"
+
+license = "MIT"
+
+include = ["src"]
+
+exclude = [
+    "debug",
+    "docs",
+    "src",
+    "test",
+    ".vscode",
+    ".gitignore",
+    ".styluaignore",
+    "LICENSE",
+    "README.md",
+    "default.project.json",
+    "roblox.toml",
+    "selene.toml",
+    "stylua.toml",
+    "testez-companion.toml",
+    "wally.toml",
+    "wally.lock"
+]
+
+[dependencies]
+signalservice = "zxibs/signalservice@0.2.0"
