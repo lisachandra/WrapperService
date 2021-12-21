@@ -7,3 +7,7 @@ This service allows you to create custom properties for roblox instances, see th
 (almost) All changes in this project will be documented here.
 
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## 0.1.0 - 2021-12-21
+
+Initial development release

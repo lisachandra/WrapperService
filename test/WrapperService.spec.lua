@@ -1,0 +1,191 @@
+--#selene: allow(undefined_variable)
+return function()
+    ---@type WrapperService
+    local WrapperService = require(script.Parent.Parent:WaitForChild("WrapperService"))
+
+    describe("isWrapped", function()
+        it("should return true", function()
+            local boolean = WrapperService.isWrapped(setmetatable({}, {
+                __tostring = function()
+                    return "WrappedInstance"
+                end
+            }))
+
+            expect(boolean).to.be.equal(true)
+        end)
+
+        it("should return false", function()
+            local boolean = WrapperService.isWrapped("WrappedInstance")
+            expect(boolean).to.be.equal(false)
+        end)
+    end)
+
+    describe("cleanup", function()
+        it("should destroy the WrappedInstance", function()
+            ---@type WrappedInstance | Workspace
+            local workspace = WrapperService:new(workspace)
+            local id = workspace.__id
+            workspace = workspace:Cleanup()
+            expect(Workspace.Name).to.be.equal("Workspace")
+            expect(WrapperService.isWrapped(workspace)).to.be.equal(false)
+            expect(WrapperService.__wrappedInstances[id]).to.be.equal(nil)
+        end)
+    end)
+    
+    describe("new", function()
+        it("should create a WrappedInstance", function(context)
+            ---@type WrappedInstance | Workspace
+            local workspace = WrapperService:new(workspace)
+            context.addWrappedInstance(workspace)
+            expect(WrapperService.isWrapped(workspace)).to.be.equal(true)
+        end)
+
+        it("should connect to an event", function(context)
+            ---@type WrappedInstance | Workspace
+            local workspace = WrapperService:new(workspace)
+            context.addWrappedInstance(workspace)
+
+            local event
+            event = workspace.Changed:Connect(function()
+                event:Disconnect()
+            end)
+
+            expect(typeof(event)).to.be.equal("RBXScriptConnection")
+        end)
+
+        it("should return the name as Workspace", function(context)
+            ---@type WrappedInstance | Workspace
+            local workspace = WrapperService:new(workspace)
+            context.addWrappedInstance(workspace)
+            expect(workspace.Name).to.be.equal("Workspace")
+        end)
+
+        it("should modify the gravity to 1", function(context)
+            ---@type WrappedInstance | Workspace
+            local workspace = WrapperService:new(workspace)
+            context.addWrappedInstance(workspace)
+            context.addRevertableChanges("Gravity", {
+                instance = workspace.Instance,
+                previousValue = workspace.Gravity
+            })
+
+            workspace.Gravity = 1
+            expect(workspace.Gravity).to.be.equal(1)
+        end)
+
+        it("should find the baseplate and modify its children", function(context)
+            ---@type WrappedInstance | Workspace
+            local workspace = WrapperService:new(workspace)
+            context.addWrappedInstance(workspace)
+            local baseplate = workspace:FindFirstChild("Baseplate")
+            
+            expect(typeof(baseplate)).to.be.equal("Instance")
+
+            for _, child in ipairs(baseplate:GetChildren()) do
+                context.addRevertableChanges("Name", {
+                    instance = child,
+                    previousValue = child.Name
+                })
+
+                child.Name = "Modified"
+                expect(child.Name).to.be.equal("Modified")
+            end
+        end)
+    end)
+
+    describe("getWrappedInstance", function()
+        it("should return a WrappedInstance", function(context)
+            WrapperService:new(workspace)
+            local workspace = WrapperService:GetWrappedInstance(workspace)
+            context.addWrappedInstance(workspace)
+            expect(WrapperService.isWrapped(workspace)).to.be.equal(true)
+        end)
+    end)
+
+    describe("add", function()
+        it("should make a new property and a method", function(context)
+            ---@type WrappedInstance | Workspace
+            local workspace = WrapperService:new(workspace)
+            context.addWrappedInstance(workspace)
+
+            workspace:Add({
+                NewProperty = {
+                    Property = "This is a new property!"
+                },
+
+                GetRandomIntegerBetweenNumberOfChildren = {
+                    Method = function()
+                        return Random.new():NextInteger(1, #workspace:GetChildren())
+                    end
+                }
+            })
+
+            expect(workspace.NewProperty).to.be.equal("This is a new property!")
+            expect(workspace:GetRandomIntegerBetweenNumberOfChildren()).to.be.a("number")
+        end)
+
+        it("should make a new event and fire with the correct arguments", function(context)
+            ---@type WrappedInstance | Workspace
+            local workspace = WrapperService:new(workspace)
+            context.addWrappedInstance(workspace)
+
+            workspace:Add({
+                AutomaticEvent = {
+                    Event = function(signal)
+                        task.wait(3)
+                        signal:Fire("fired!")
+                        signal:Destroy()
+                    end
+                }
+            })
+
+            workspace.AutomaticEvent:Connect(function(stringArgument)
+                expect(stringArgument).to.be.equal("fired!")
+            end)
+        end)
+    end)
+
+    describe("waitForProperty", function()
+        it("should wait for a property", function(context)
+            ---@type WrappedInstance | Workspace
+            local workspace = WrapperService:new(workspace)
+            context.addWrappedInstance(workspace)
+
+            workspace:Add({
+                NewProperty = {
+                    Property = "This is a new property!"
+                },
+
+                GetNewProperty = {
+                    Method = function()
+                        return workspace:WaitForProperty("NewProperty")
+                    end
+                }
+            })
+
+            expect(workspace.NewProperty).to.be.equal("This is a new property!")
+            expect(workspace:GetNewProperty()).to.be.equal("This is a new property!")
+        end)
+
+        it("should timeout while waiting for a property", function(context)
+            ---@type WrappedInstance | Workspace
+            local workspace = WrapperService:new(workspace)
+            context.addWrappedInstance(workspace)
+
+            workspace:Add({
+                NewProperty = {
+                    Property = "This is a new property!"
+                },
+
+                GetNewProperty = {
+                    Method = function()
+                        return workspace:WaitForProperty("InvalidNewProperty", 2)
+                    end
+                }
+            })
+
+            expect(workspace.NewProperty).to.be.equal("This is a new property!")
+            expect(workspace:GetNewProperty()).to.be.equal(nil)
+        end)
+    end)
+end
