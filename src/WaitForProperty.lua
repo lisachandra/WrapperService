@@ -1,11 +1,5 @@
 local messages = require(script.Parent:WaitForChild("messages"))
 
---[[
-
-]]
----@param self WrappedInstance
----@param propertyName string
----@param timeOut integer
 local function WaitForProperty(self, propertyName, timeOut)
 	if rawget(self, propertyName) ~= nil then
 		return rawget(self, propertyName)

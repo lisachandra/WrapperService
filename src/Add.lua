@@ -4,18 +4,6 @@ local switch = require(script.Parent:WaitForChild("switch"))
 ---@type SignalService
 local SignalService = require(script.Parent:WaitForChild("SignalService"))
 
---[[
-    ValueTypes:  
-    Event  
-    Method  
-    Property  
-
-    ```lua
-    <WrappedInstance>:Add(properties: {[string]: {[ValueType]: any}})
-    ```
-]]
----@param properties table
----@param self WrappedInstance
 local function Add(self, properties)
 	assert(typeof(properties) == "table", messages.BAD_ARGUMENT:format(1, "function", "Add", "table", typeof(properties)))
 

@@ -1,4 +1,3 @@
----@class WrapperService
 local WrapperService = {
 	__wrappedInstances = {},
 

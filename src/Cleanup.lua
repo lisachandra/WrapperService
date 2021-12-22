@@ -11,13 +11,6 @@ local function ClearTableDescendants(tableToClear)
 	end
 end
 
---[[
-    ```lua
-    <WrappedInstance>:Cleanup()
-    ```
-]]
----@param self WrappedInstance
----@return Instance
 local function Cleanup(self)
 	local instance = self.Instance
 	WrapperService.__wrappedInstances[self.__id] = nil

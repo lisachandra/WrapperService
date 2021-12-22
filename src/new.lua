@@ -10,20 +10,11 @@ local function createId(self)
 	end
 end
 
---[[
-	```lua
-	WrapperService:new(instanceToWrap: Instance)
-	```
-]]
----@param WrapperService WrapperService
----@param instanceToWrap Instance
----@return WrappedInstance
-local function new(WrapperService, instanceToWrap)
+local function new(self, instanceToWrap)
 	assert(typeof(instanceToWrap) == "Instance", messages.BAD_ARGUMENT:format(1, "function", "new", "Instance", typeof(instanceToWrap)))
-	local id = createId(WrapperService)
+	local id = createId(self)
 
-	---@class WrappedInstance
-	local self = {
+	local WrappedInstance = {
 		__id = id,
 
 		Instance = instanceToWrap,
@@ -33,7 +24,7 @@ local function new(WrapperService, instanceToWrap)
 		WaitForProperty = require(script.Parent:WaitForChild("WaitForProperty")),
 	}
 
-	setmetatable(self, {
+	setmetatable(WrappedInstance, {
 		__index = function(_self, key)
 			if typeof(instanceToWrap[key]) == "function" then
 				return function(_, ...)
@@ -53,8 +44,8 @@ local function new(WrapperService, instanceToWrap)
 		end,
 
 		__eq = function(_self, value)
-			if WrapperService.isWrapped(value) then
-				if value.__id == self.__id then
+			if self.isWrapped(value) then
+				if value.__id == WrappedInstance.__id then
 					return true
 				else
 					return false
@@ -65,8 +56,8 @@ local function new(WrapperService, instanceToWrap)
 		end,
 	})
 
-	WrapperService.__wrappedInstances[id] = self
-	return self
+	self.__wrappedInstances[id] = WrappedInstance
+	return WrappedInstance
 end
 
 return new

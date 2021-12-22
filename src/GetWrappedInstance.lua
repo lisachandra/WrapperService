@@ -1,15 +1,5 @@
-task.wait() -- this is for avoiding recursion
-
 local messages = require(script.Parent:WaitForChild("messages"))
 
---[[
-	```lua
-	WrapperService:GetWrappedInstance(instanceToGet: Instance)
-	```
-]]
----@param instanceToGet Instance
----@param self WrapperService
----@return WrappedInstance?
 local function GetWrappedInstance(self, instanceToGet)
 	assert(typeof(instanceToGet) == "Instance", messages.BAD_ARGUMENT:format(1, "function", "GetWrappedInstance", "Instance", typeof(instanceToGet)))
 
