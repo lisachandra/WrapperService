@@ -11,11 +11,11 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## 0.2.0 - 2021-12-22
 ### Added
 
-- Intellisense module
+- [Intellisense module](https://github.com/zxibs/WrapperService/blob/main/src/intellisense.lua)
 
 ### Removed
 
-- EmmyLua annotations and added it to the intellisense module
+- EmmyLua annotations and added it to the [intellisense module](https://github.com/zxibs/WrapperService/blob/main/src/intellisense.lua)
 
 ## 0.1.0 - 2021-12-21
 
