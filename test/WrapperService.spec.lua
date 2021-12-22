@@ -26,7 +26,7 @@ return function()
             local workspace = WrapperService:new(workspace)
             local id = workspace.__id
             workspace = workspace:Cleanup()
-            expect(Workspace.Name).to.be.equal("Workspace")
+            expect(workspace.Name).to.be.equal("Workspace")
             expect(WrapperService.isWrapped(workspace)).to.be.equal(false)
             expect(WrapperService.__wrappedInstances[id]).to.be.equal(nil)
         end)
@@ -132,9 +132,8 @@ return function()
             workspace:Add({
                 AutomaticEvent = {
                     Event = function(signal)
-                        task.wait(3)
+                        task.wait(1)
                         signal:Fire("fired!")
-                        signal:Destroy()
                     end
                 }
             })
