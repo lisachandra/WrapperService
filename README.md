@@ -16,7 +16,7 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
-- Updated [SignalService](https://wally.run/package/zxibs/signalservice)
+- Updated [SignalService](https://wally.run/package/zxibs/signalservice) to v0.3.1
 
 ## 0.2.2 - 2021-12-22
 
