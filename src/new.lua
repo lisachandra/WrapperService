@@ -1,4 +1,12 @@
-local messages = require(script.Parent:WaitForChild("messages"))
+local t = require(script.Parent:WaitForChild("t"))
+
+local newCheck = t.tuple(function(selfToCheck)
+	if tostring(selfToCheck) == "WrapperService" and typeof(selfToCheck) == "table" then
+		return true
+	else
+		return false, "expected WrapperService, got " .. typeof(selfToCheck)
+	end
+end, t.Instance)
 
 local function createId(self)
 	local id = tostring(Random.new():NextInteger(0, math.huge))
@@ -11,7 +19,7 @@ local function createId(self)
 end
 
 local function new(self, instanceToWrap)
-	assert(typeof(instanceToWrap) == "Instance", messages.BAD_ARGUMENT:format(1, "function", "new", "Instance", typeof(instanceToWrap)))
+	assert(newCheck(self, instanceToWrap))
 	local id = createId(self)
 
 	local WrappedInstance = {
@@ -26,6 +34,11 @@ local function new(self, instanceToWrap)
 
 	setmetatable(WrappedInstance, {
 		__index = function(_self, key)
+			if instanceToWrap[key] == nil then
+				local message = ("%q (%s) is not a valid member of %s"):format(tostring(key), typeof(key), instanceToWrap.Name)
+				error(message, 2)
+			end
+
 			if typeof(instanceToWrap[key]) == "function" then
 				return function(_, ...)
 					return instanceToWrap[key](instanceToWrap, ...)
@@ -36,6 +49,11 @@ local function new(self, instanceToWrap)
 		end,
 
 		__newindex = function(_self, key, value)
+			if instanceToWrap[key] == nil then
+				local message = ("%q (%s) is not a valid member of %s"):format(tostring(key), typeof(key), instanceToWrap.Name)
+				error(message, 2)
+			end
+
 			instanceToWrap[key] = value
 		end,
 

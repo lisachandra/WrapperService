@@ -1,5 +1,7 @@
----@type WrapperService
 local WrapperService = require(script.Parent)
+local t = require(script.Parent:WaitForChild("t"))
+
+local cleanupCheck = t.tuple(WrapperService.isWrapped)
 
 local function ClearTableDescendants(tableToClear)
 	for index, value in pairs(tableToClear) do
@@ -12,6 +14,8 @@ local function ClearTableDescendants(tableToClear)
 end
 
 local function Cleanup(self)
+	assert(cleanupCheck(self))
+
 	local instance = self.Instance
 	WrapperService.__wrappedInstances[self.__id] = nil
 	ClearTableDescendants(self)

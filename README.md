@@ -8,6 +8,16 @@ This service allows you to create custom properties for roblox instances, see th
 
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.3.1 - 2021-12-22
+
+### Added
+
+- Typechecking with [t module](https://github.com/osyrisrblx/t).
+
+### Changed
+
+- Updated [SignalService](https://wally.run/package/zxibs/signalservice)
+
 ## 0.2.2 - 2021-12-22
 
 ### Changed

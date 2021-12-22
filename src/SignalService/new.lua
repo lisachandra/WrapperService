@@ -1,4 +1,4 @@
-local strict = require(script.Parent.strict)
+local strict = require(script.Parent:WaitForChild("strict"))
 
 local function new()
 	local Signal = {

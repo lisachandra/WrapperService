@@ -1,3 +1,5 @@
+local SignalService = require(script.Parent)
+
 local function ClearTableDescendants(tableToClear)
 	for index, value in pairs(tableToClear) do
 		if typeof(value) == "table" then
@@ -9,6 +11,12 @@ local function ClearTableDescendants(tableToClear)
 end
 
 local function Destroy(self)
+	if not SignalService.isSignal(self) then
+		local message = "Expected `:` not `.` while calling function Fire"
+
+		error(message, 2)
+	end
+
 	self:DisconnectAll()
 	ClearTableDescendants(self)
 

@@ -19,15 +19,15 @@
 ---@return any
 local function switch(variable, conditions)
 	local trace = debug.traceback(coroutine.running(), "", 1)
-	local value = conditions[tostring(variable)] and conditions[tostring(variable)]() or conditions["default"] and conditions["default"]() or nil
+	local values = conditions[tostring(variable)] and table.pack(conditions[tostring(variable)]()) or conditions["default"] and table.pack(conditions["default"]()) or nil
 
-	if not value then
-		local message = string.format("Value is nil or false, variable might be invalid \nTraceback: " .. trace .. "\nVariable: " .. tostring(variable), "%q")
+	if not values then
+		local message = string.format("Values are nil or false, variable might be invalid \nTraceback: " .. trace .. "\nCase: " .. tostring(variable), "%q")
 
 		warn(message)
 	end
 
-	return value
+	return table.unpack(values)
 end
 
 return switch
