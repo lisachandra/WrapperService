@@ -1,8 +1,3 @@
---[[
-
-]]
----@param signalObject any
----@return boolean
 local function isSignal(signalObject)
 	if tostring(signalObject) == "Signal" or tostring(signalObject) == "Connection" and typeof(signalObject) == "table" then
 		return true

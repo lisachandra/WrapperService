@@ -10,20 +10,10 @@ local function createId(self)
 	end
 end
 
---[[
-
-]]
----@param self Signal
----@param callbackFunction fun()
----@return Connection
 local function Connect(self, callbackFunction)
 	local id = createId(self)
 	self.__callbacks[id] = callbackFunction
 
-	--[[
-        
-    ]]
-	---@class Connection
 	local Connection = {
 		__signal = self,
 		__id = id,

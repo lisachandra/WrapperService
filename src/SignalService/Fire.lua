@@ -1,7 +1,3 @@
---[[
-
-]]
----@param self Signal
 local function Fire(self, ...)
 	for _, callback in pairs(self.__callbacks) do
 		coroutine.wrap(callback)(...)

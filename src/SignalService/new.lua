@@ -1,14 +1,6 @@
 local strict = require(script.Parent.strict)
 
---[[
-
-]]
----@return Signal
 local function new()
-	--[[
-        
-    ]]
-	---@class Signal
 	local Signal = {
 		__connections = {},
 		__callbacks = {},

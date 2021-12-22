@@ -8,10 +8,6 @@ local function ClearTableDescendants(tableToClear)
 	end
 end
 
---[[
-
-]]
----@param self Signal
 local function Destroy(self)
 	self:DisconnectAll()
 	ClearTableDescendants(self)
