@@ -1,0 +1,10 @@
+classOrder = ["WrapperService", "WrappedInstance"]
+changelog = true
+gitSourceBranch = "main"
+
+[docusaurus]
+tagline = "A service that allows you to create custom properties for roblox instances."
+
+[home]
+enabled = true
+includeReadme = false
