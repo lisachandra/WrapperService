@@ -14,18 +14,8 @@
     print(month) -- January
     ```
 ]]
----@param variable string | number
----@param conditions table
----@return any
 local function switch(variable, conditions)
-	local trace = debug.traceback(coroutine.running(), "", 1)
-	local values = conditions[tostring(variable)] and table.pack(conditions[tostring(variable)]()) or conditions["default"] and table.pack(conditions["default"]()) or nil
-
-	if not values then
-		local message = string.format("Values are nil or false, variable might be invalid \nTraceback: " .. trace .. "\nCase: " .. tostring(variable), "%q")
-
-		warn(message)
-	end
+	local values = conditions[variable] and table.pack(conditions[variable]()) or conditions["default"] and table.pack(conditions["default"]()) or { nil }
 
 	return table.unpack(values)
 end

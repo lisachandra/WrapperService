@@ -90,4 +90,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Moonwave build files
+build
+
 # End of https://www.toptal.com/developers/gitignore/api/lua,windows,visualstudiocode

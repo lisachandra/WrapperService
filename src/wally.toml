@@ -2,9 +2,9 @@
 
 name = "zxibs/wrapperservice"
 
-description = "This service allows you to create custom properties for roblox instances, see the documentation for more info: (documentation is not available yet.) github: https://github.com/zxibs/WrapperService"
+description = "This service allows you to create custom properties for roblox instances, see the documentation for more info: https://zxibs.github.io/WrapperService/ github: https://github.com/zxibs/WrapperService"
 
-version = "0.3.1"
+version = "0.3.2"
 
 license = "MIT"
 

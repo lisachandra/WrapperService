@@ -4,6 +4,21 @@
 
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.3.2 - 2021-12-24
+
+### Added
+
+- [Moonwave documentation](https://zxibs.github.io/WrapperService/)
+
+### Changed
+
+- Updated [SignalService](https://wally.run/package/zxibs/signalservice) to v0.4.0
+- Typechecking in [Add](https://github.com/zxibs/WrapperService/blob/main/src/Add.lua) function to be better
+
+### Removed
+
+- EmmyLua annotations in the [switch module](https://github.com/zxibs/WrapperService/blob/main/src/switch.lua)
+
 ## 0.3.1 - 2021-12-22
 
 ### Added
@@ -12,13 +27,13 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
-- Updated [SignalService](https://wally.run/package/zxibs/signalservice)
+- Updated [SignalService](https://wally.run/package/zxibs/signalservice) to v0.3.1
 
 ## 0.2.2 - 2021-12-22
 
 ### Changed
 
-- Updated [SignalService](https://wally.run/package/zxibs/signalservice)
+- Updated [SignalService](https://wally.run/package/zxibs/signalservice) to v0.2.1
 
 ## 0.2.1 - 2021-12-22
 

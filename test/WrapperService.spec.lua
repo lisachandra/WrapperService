@@ -150,11 +150,8 @@ return function()
             local workspace = WrapperService:new(workspace)
             context.addWrappedInstance(workspace)
 
+           
             workspace:Add({
-                NewProperty = {
-                    Property = "This is a new property!"
-                },
-
                 GetNewProperty = {
                     Method = function()
                         return workspace:WaitForProperty("NewProperty")
@@ -162,7 +159,14 @@ return function()
                 }
             })
 
-            expect(workspace.NewProperty).to.be.equal("This is a new property!")
+            task.delay(1, function()
+                workspace:Add({
+                    NewProperty = {
+                        Property = "This is a new property!"
+                    },
+                })
+            end)
+
             expect(workspace:GetNewProperty()).to.be.equal("This is a new property!")
         end)
 

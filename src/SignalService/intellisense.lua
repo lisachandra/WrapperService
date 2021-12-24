@@ -41,6 +41,7 @@ function SignalService.isWrapped(signalToCheck) end
 ---@field __connections table<string, Connection>
 ---@field __callbacks table<string, fun()>
 ---@field __waiters table<number, thread>
+---@field __dispatchHandler table<string, fun()>
 local Signal = {}
 
 --- Fires the signal causing connected callbacks to fire
@@ -63,6 +64,15 @@ function Signal:Connect(callbackFunction) end
 
 --- Runs `<Signal>:DisconnectAll()` then destroys/cleans the signal for GC
 function Signal:Destroy() end
+
+--- Similar to [Rodux.Store:dispatch](https://roblox.github.io/rodux/api-reference/#storedispatch)
+---@param action table
+---@return any
+function Signal:Dispatch(action) end
+
+--- Similar to [Rodux.createReducer](https://roblox.github.io/rodux/api-reference/#roduxcreatereducer)
+---@param dispatchHandlers table
+function Signal:onDispatch(dispatchHandlers) end
 
 --- Runs `<Connection>:Disconnect()` on every connection that is in the signal
 function Signal:DisconnectAll() end

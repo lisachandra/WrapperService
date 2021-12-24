@@ -10,6 +10,8 @@ local function new()
 		Wait = require(script.Parent:WaitForChild("Wait")),
 		Connect = require(script.Parent:WaitForChild("Connect")),
 		Destroy = require(script.Parent:WaitForChild("Destroy")),
+		Dispatch = require(script.Parent:WaitForChild("Dispatch")),
+		onDispatch = require(script.Parent:WaitForChild("onDispatch")),
 		DisconnectAll = require(script.Parent:WaitForChild("DisconnectAll")),
 	}
 
