@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="generator" content="Docusaurus v2.0.0-beta.9">
 <title data-react-helmet="true">WrappedInstance | WrapperService</title><meta data-react-helmet="true" property="og:title" content="WrappedInstance | WrapperService"><meta data-react-helmet="true" name="twitter:card" content="summary_large_image"><meta data-react-helmet="true" property="og:url" content="https://zxibs.github.io/WrapperService/api/WrappedInstance"><meta data-react-helmet="true" name="docusaurus_locale" content="en"><meta data-react-helmet="true" name="docusaurus_tag" content="default"><link data-react-helmet="true" rel="canonical" href="https://zxibs.github.io/WrapperService/api/WrappedInstance"><link data-react-helmet="true" rel="alternate" href="https://zxibs.github.io/WrapperService/api/WrappedInstance" hreflang="en"><link data-react-helmet="true" rel="alternate" href="https://zxibs.github.io/WrapperService/api/WrappedInstance" hreflang="x-default"><link rel="stylesheet" href="/WrapperService/assets/css/styles.20141128.css">
-<link rel="preload" href="/WrapperService/assets/js/runtime~main.76e38d07.js" as="script">
-<link rel="preload" href="/WrapperService/assets/js/main.ab4be470.js" as="script">
+<link rel="preload" href="/WrapperService/assets/js/runtime~main.4f3159bc.js" as="script">
+<link rel="preload" href="/WrapperService/assets/js/main.40861f8f.js" as="script">
 </head>
 <body>
 <script>!function(){function e(e){document.documentElement.setAttribute("data-theme",e)}var t=function(){var e=null;try{e=localStorage.getItem("theme")}catch(e){}return e}();null!==t?e(t):window.matchMedia("(prefers-color-scheme: dark)").matches?e("dark"):(window.matchMedia("(prefers-color-scheme: light)").matches,e("light"))}()</script><div id="__docusaurus">
@@ -17,16 +17,19 @@
 
 <span class="token keyword">local</span> normalWorkspace<span class="token punctuation">:</span> Workspace <span class="token operator">=</span> workspace<span class="token punctuation">:</span><span class="token function">Cleanup</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 </code></pre>
-</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="Add"><code style="text-decoration:none">Add</code><a aria-hidden="true" class="hash-link" href="#Add" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/zxibs/WrapperService/blob/main/moonwave/WrapperService.lua#L103"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>WrappedInstance<!-- -->:</code><code class="green_3LnD">Add</code><code>(</code><code>properties<!-- -->: </code><code class="blue_2Afy">table</code><code class="op_1JtD">&lt;</code><code class="blue_2Afy">string,</code><code class="blue_2Afy">table</code><code class="op_1JtD">&lt;</code><code class="blue_2Afy">string,</code><code class="blue_2Afy">any</code><code class="op_1JtD">&gt;</code><code class="op_1JtD">&gt;</code><code>) → </code><code>(</code><code>)</code></div><div>
+</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="Add"><code style="text-decoration:none">Add</code><a aria-hidden="true" class="hash-link" href="#Add" title="Direct link to heading">​</a></h3><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/zxibs/WrapperService/blob/main/moonwave/WrapperService.lua#L106"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>WrappedInstance<!-- -->:</code><code class="green_3LnD">Add</code><code>(</code><code>properties<!-- -->: </code><code class="blue_2Afy">table</code><code class="op_1JtD">&lt;</code><code class="blue_2Afy">string,</code><code class="blue_2Afy">table</code><code class="op_1JtD">&lt;</code><code class="blue_2Afy">string,</code><code class="blue_2Afy">any</code><code class="op_1JtD">&gt;</code><code class="op_1JtD">&gt;</code><code>) → </code><code>(</code><code>)</code></div><div>
 <p>Adds properties to the instance (Event/Method/Property)</p>
-<pre class="language-lua"><code class="language-lua"><span class="token operator">&#x3C;</span>WrappedInstance<span class="token operator">></span><span class="token punctuation">:</span><span class="token function">Add</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+<pre class="language-lua"><code class="language-lua"><span class="token comment">---@type WrappedInstance | Workspace -- This is for IntelliSense</span>
+<span class="token keyword">local</span> workspace <span class="token operator">=</span> WrapperService<span class="token punctuation">:</span><span class="token function">new</span><span class="token punctuation">(</span>workspace<span class="token punctuation">)</span>
+
+workspace<span class="token punctuation">:</span><span class="token function">Add</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
     NewProperty <span class="token operator">=</span> <span class="token punctuation">{</span>
         Property <span class="token operator">=</span> <span class="token string">"This is a new property!"</span>
     <span class="token punctuation">}</span><span class="token punctuation">,</span>
 
     NewMethod <span class="token operator">=</span> <span class="token punctuation">{</span>
         Method <span class="token operator">=</span> <span class="token keyword">function</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-            <span class="token keyword">return</span> <span class="token operator">&#x3C;</span>WrappedInstance<span class="token operator">></span><span class="token punctuation">:</span><span class="token function">WaitForProperty</span><span class="token punctuation">(</span><span class="token string">"NewProperty"</span><span class="token punctuation">)</span>
+            <span class="token keyword">return</span> workspace<span class="token punctuation">:</span><span class="token function">WaitForProperty</span><span class="token punctuation">(</span><span class="token string">"NewProperty"</span><span class="token punctuation">)</span>
         <span class="token keyword">end</span>
     <span class="token punctuation">}</span>
 
@@ -41,14 +44,14 @@
     <span class="token punctuation">}</span><span class="token punctuation">,</span>
 <span class="token punctuation">}</span><span class="token punctuation">)</span>
 
-<span class="token keyword">local</span> NewProperty <span class="token operator">=</span> <span class="token operator">&#x3C;</span>WrappedInstance<span class="token operator">></span><span class="token punctuation">.</span>NewProperty
-NewProperty <span class="token operator">=</span> <span class="token operator">&#x3C;</span>WrappedInstance<span class="token operator">></span><span class="token punctuation">:</span><span class="token function">NewMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">local</span> NewProperty <span class="token operator">=</span> workspace<span class="token punctuation">.</span>NewProperty
+NewProperty <span class="token operator">=</span> workspace<span class="token punctuation">:</span><span class="token function">NewMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 
-<span class="token keyword">local</span> NewConnection <span class="token operator">=</span> <span class="token operator">&#x3C;</span>WrappedInstance<span class="token operator">></span><span class="token punctuation">.</span>NewEvent<span class="token punctuation">:</span><span class="token function">Connect</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>randomInteger<span class="token punctuation">)</span>
+<span class="token keyword">local</span> NewConnection <span class="token operator">=</span> workspace<span class="token punctuation">.</span>NewEvent<span class="token punctuation">:</span><span class="token function">Connect</span><span class="token punctuation">(</span><span class="token keyword">function</span><span class="token punctuation">(</span>randomInteger<span class="token punctuation">)</span>
     <span class="token function">print</span><span class="token punctuation">(</span><span class="token function">tostring</span><span class="token punctuation">(</span>randomInteger<span class="token punctuation">)</span><span class="token punctuation">)</span>
 <span class="token keyword">end</span><span class="token punctuation">)</span>
 </code></pre>
-</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="WaitForProperty"><code style="text-decoration:none">WaitForProperty</code><a aria-hidden="true" class="hash-link" href="#WaitForProperty" title="Direct link to heading">​</a></h3><span class="badge_3ZFo" style="color:#f1c40f"><span class="badgeTooltip_2qiw">This is a yielding function. When called, it will pause the Lua thread that called the function until a result is ready to be returned, without interrupting other scripts.</span><span class="badgeToolTipTail_2yaQ"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="#f1c40f" role="img" aria-label="This is a yielding function. When called, it will pause the Lua thread that called the function until a result is ready to be returned, without interrupting other scripts."><path d="M96.4 11.9c-1.4-2.5-4-4-6.9-4H10.8c-2.9 0-5.4 1.5-6.9 4-1.4 2.5-1.4 5.5 0 7.9L43.3 88c1.4 2.5 4 4 6.9 4 2.9 0 5.4-1.5 6.9-4l39.3-68.2c1.4-2.4 1.4-5.4 0-7.9zM46.3 54.5c1.1-1.1 2.3-1.6 3.8-1.6s2.8.5 3.8 1.6c1.1 1.1 1.6 2.3 1.6 3.8s-.5 2.8-1.6 3.8c-1.1 1.1-2.3 1.6-3.8 1.6s-2.8-.5-3.8-1.6c-1.1-1.1-1.6-2.3-1.6-3.8.1-1.5.6-2.8 1.6-3.8zm-.5-4.9V21.8h8.8v27.8h-8.8z"></path></svg> <!-- -->Yields</span></span><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/zxibs/WrapperService/blob/main/moonwave/WrapperService.lua#L118"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>WrappedInstance<!-- -->:</code><code class="green_3LnD">WaitForProperty</code><code>(</code><div class="inset_2cJr"><div><code>propertyName<!-- -->: </code><code class="blue_2Afy">string</code><code>,</code></div><div><code>timeOut?<!-- -->: </code><code class="blue_2Afy">number</code></div></div><code>) → </code><code class="blue_2Afy">any</code></div><div>
+</div><div class="divider_3z1R"></div><h3 class="anchor anchorWithStickyNavbar_31ik" id="WaitForProperty"><code style="text-decoration:none">WaitForProperty</code><a aria-hidden="true" class="hash-link" href="#WaitForProperty" title="Direct link to heading">​</a></h3><span class="badge_3ZFo" style="color:#f1c40f"><span class="badgeTooltip_2qiw">This is a yielding function. When called, it will pause the Lua thread that called the function until a result is ready to be returned, without interrupting other scripts.</span><span class="badgeToolTipTail_2yaQ"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="#f1c40f" role="img" aria-label="This is a yielding function. When called, it will pause the Lua thread that called the function until a result is ready to be returned, without interrupting other scripts."><path d="M96.4 11.9c-1.4-2.5-4-4-6.9-4H10.8c-2.9 0-5.4 1.5-6.9 4-1.4 2.5-1.4 5.5 0 7.9L43.3 88c1.4 2.5 4 4 6.9 4 2.9 0 5.4-1.5 6.9-4l39.3-68.2c1.4-2.4 1.4-5.4 0-7.9zM46.3 54.5c1.1-1.1 2.3-1.6 3.8-1.6s2.8.5 3.8 1.6c1.1 1.1 1.6 2.3 1.6 3.8s-.5 2.8-1.6 3.8c-1.1 1.1-2.3 1.6-3.8 1.6s-2.8-.5-3.8-1.6c-1.1-1.1-1.6-2.3-1.6-3.8.1-1.5.6-2.8 1.6-3.8zm-.5-4.9V21.8h8.8v27.8h-8.8z"></path></svg> <!-- -->Yields</span></span><div class="repositoryDetailsContainer_1UH0"><a class="sourceButton_2aE5" href="https://github.com/zxibs/WrapperService/blob/main/moonwave/WrapperService.lua#L121"><div class="sourceButtonText_monK">&lt;/&gt;</div></a></div><div class="memberString_P8-X"><code>WrappedInstance<!-- -->:</code><code class="green_3LnD">WaitForProperty</code><code>(</code><div class="inset_2cJr"><div><code>propertyName<!-- -->: </code><code class="blue_2Afy">string</code><code>,</code></div><div><code>timeOut?<!-- -->: </code><code class="blue_2Afy">number</code></div></div><code>) → </code><code class="blue_2Afy">any</code></div><div>
 <p>Basically like <code>&#x3C;Instance>:WaitForChild()</code> but for properties</p>
 <p>
   This is useful when you want to add a method that
@@ -75,7 +78,7 @@ NewProperty <span class="token operator">=</span> <span class="token operator">&
         },
         {
             &quot;name&quot;: &quot;Add&quot;,
-            &quot;desc&quot;: &quot;Adds properties to the instance (Event/Method/Property)  \n```lua\n&lt;WrappedInstance&gt;:Add({\n    NewProperty = {\n        Property = \&quot;This is a new property!\&quot;\n    },\n\n    NewMethod = {\n        Method = function()\n            return &lt;WrappedInstance&gt;:WaitForProperty(\&quot;NewProperty\&quot;)\n        end\n    }\n\n    NewEvent = {\n        ---@param signal Signal -- This is for IntelliSense\n        Event = function(signal)\n            while true do\n                task.wait(5)\n                signal:Fire(Random.new():NextInteger(1, math.huge))\n            end\n        end\n    },\n})\n\nlocal NewProperty = &lt;WrappedInstance&gt;.NewProperty\nNewProperty = &lt;WrappedInstance&gt;:NewMethod()\n\nlocal NewConnection = &lt;WrappedInstance&gt;.NewEvent:Connect(function(randomInteger)\n    print(tostring(randomInteger))\nend)\n``` &quot;,
+            &quot;desc&quot;: &quot;Adds properties to the instance (Event/Method/Property)  \n```lua\n---@type WrappedInstance | Workspace -- This is for IntelliSense\nlocal workspace = WrapperService:new(workspace)\n\nworkspace:Add({\n    NewProperty = {\n        Property = \&quot;This is a new property!\&quot;\n    },\n\n    NewMethod = {\n        Method = function()\n            return workspace:WaitForProperty(\&quot;NewProperty\&quot;)\n        end\n    }\n\n    NewEvent = {\n        ---@param signal Signal -- This is for IntelliSense\n        Event = function(signal)\n            while true do\n                task.wait(5)\n                signal:Fire(Random.new():NextInteger(1, math.huge))\n            end\n        end\n    },\n})\n\nlocal NewProperty = workspace.NewProperty\nNewProperty = workspace:NewMethod()\n\nlocal NewConnection = workspace.NewEvent:Connect(function(randomInteger)\n    print(tostring(randomInteger))\nend)\n``` &quot;,
             &quot;params&quot;: [
                 {
                     &quot;name&quot;: &quot;properties&quot;,
@@ -86,7 +89,7 @@ NewProperty <span class="token operator">=</span> <span class="token operator">&
             &quot;returns&quot;: [],
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;source&quot;: {
-                &quot;line&quot;: 103,
+                &quot;line&quot;: 106,
                 &quot;path&quot;: &quot;moonwave/WrapperService.lua&quot;
             }
         },
@@ -114,7 +117,7 @@ NewProperty <span class="token operator">=</span> <span class="token operator">&
             &quot;function_type&quot;: &quot;method&quot;,
             &quot;yields&quot;: true,
             &quot;source&quot;: {
-                &quot;line&quot;: 118,
+                &quot;line&quot;: 121,
                 &quot;path&quot;: &quot;moonwave/WrapperService.lua&quot;
             }
         }
@@ -128,7 +131,7 @@ NewProperty <span class="token operator">=</span> <span class="token operator">&
         &quot;path&quot;: &quot;moonwave/WrapperService.lua&quot;
     }
 }</pre></details></div><div class="col col--3"><div class="tableOfContents_35-E thin-scrollbar"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#types" class="table-of-contents__link toc-highlight">Types</a></li><li><a href="#properties" class="table-of-contents__link toc-highlight">Properties</a></li><li><a href="#functions" class="table-of-contents__link toc-highlight">Functions</a><ul><li><a href="#Add" class="table-of-contents__link toc-highlight">:Add</a></li><li><a href="#Cleanup" class="table-of-contents__link toc-highlight">:Cleanup</a></li><li><a href="#WaitForProperty" class="table-of-contents__link toc-highlight">:WaitForProperty</a></li></ul></li></ul></div></div></div></div></main></div></div><footer class="footer footer--dark"><div class="container"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2021 zxibs. Built with Moonwave and Docusaurus.</div></div></div></footer></div>
-<script src="/WrapperService/assets/js/runtime~main.76e38d07.js"></script>
-<script src="/WrapperService/assets/js/main.ab4be470.js"></script>
+<script src="/WrapperService/assets/js/runtime~main.4f3159bc.js"></script>
+<script src="/WrapperService/assets/js/main.40861f8f.js"></script>
 </body>
 </html>
