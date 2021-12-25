@@ -68,14 +68,17 @@ function WrappedInstance:Cleanup() end
 --[=[
     Adds properties to the instance (Event/Method/Property)  
     ```lua
-    <WrappedInstance>:Add({
+    ---@type WrappedInstance | Workspace -- This is for IntelliSense
+    local workspace = WrapperService:new(workspace)
+
+    workspace:Add({
         NewProperty = {
             Property = "This is a new property!"
         },
 
         NewMethod = {
             Method = function()
-                return <WrappedInstance>:WaitForProperty("NewProperty")
+                return workspace:WaitForProperty("NewProperty")
             end
         }
 
@@ -90,10 +93,10 @@ function WrappedInstance:Cleanup() end
         },
     })
 
-    local NewProperty = <WrappedInstance>.NewProperty
-    NewProperty = <WrappedInstance>:NewMethod()
+    local NewProperty = workspace.NewProperty
+    NewProperty = workspace:NewMethod()
 
-    local NewConnection = <WrappedInstance>.NewEvent:Connect(function(randomInteger)
+    local NewConnection = workspace.NewEvent:Connect(function(randomInteger)
         print(tostring(randomInteger))
     end)
     ``` 
