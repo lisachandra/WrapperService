@@ -1,7 +1,4 @@
----@type SignalService
-local SignalService = require(script.Parent:WaitForChild("SignalService"))
-
----@type WrapperService
+local SignalService = require(script.Parent.Parent:WaitForChild("SignalService"))
 local WrapperService = require(script.Parent)
 
 local t = require(script.Parent:WaitForChild("t"))
