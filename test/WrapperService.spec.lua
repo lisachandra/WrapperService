@@ -150,11 +150,10 @@ return function()
             local workspace = WrapperService:new(workspace)
             context.addWrappedInstance(workspace)
 
-           
             workspace:Add({
                 GetNewProperty = {
-                    Method = function()
-                        return workspace:WaitForProperty("NewProperty")
+                    Method = function(self)
+                        return self:WaitForProperty("NewProperty")
                     end
                 }
             })
@@ -181,8 +180,8 @@ return function()
                 },
 
                 GetNewProperty = {
-                    Method = function()
-                        return workspace:WaitForProperty("InvalidNewProperty", 2)
+                    Method = function(self)
+                        return self:WaitForProperty("InvalidNewProperty", 2)
                     end
                 }
             })

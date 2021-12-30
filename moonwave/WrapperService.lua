@@ -8,6 +8,10 @@
 local WrapperService = {}
 
 --[=[
+    
+]=]
+
+--[=[
     Creates a wrapped instance.
     ```lua
     ---@type WrappedInstance | Workspace -- This is for IntelliSense
@@ -36,7 +40,7 @@ function WrapperService:GetWrappedInstance(instanceToGet) end
 --[=[
     Returns true if the passed instance is wrapped, false if it's not.  
     ```lua  
-    local boolean = WrapperService.isWrapped(WrapperService:new(workspace)) -- True
+    local boolean = WrapperService.isWrapped(WrapperService:new(workspace)) -- true
     ```
 
     @param instanceToCheck Instance | WrappedInstance
@@ -50,6 +54,12 @@ function WrapperService.isWrapped(instanceToCheck) end
     @class WrappedInstance
 ]=]
 local WrappedInstance = {}
+
+--[=[
+    Valid value types that are for adding properties using the Add function
+    @type ValueType "Property" | "Method" | "Event"
+    @within WrappedInstance
+]=]
 
 --[=[
     Destroys/Cleans the wrapped instance for GC  
@@ -77,14 +87,14 @@ function WrappedInstance:Cleanup() end
         },
 
         NewMethod = {
-            Method = function()
-                return workspace:WaitForProperty("NewProperty")
+            Method = function(self)
+                return self.NewProperty
             end
         }
 
         NewEvent = {
             ---@param signal Signal -- This is for IntelliSense
-            Event = function(signal)
+            Event = function(signal) -- This function will be the signal's fire handler.
                 while true do
                     task.wait(5)
                     signal:Fire(Random.new():NextInteger(1, math.huge))
@@ -101,7 +111,7 @@ function WrappedInstance:Cleanup() end
     end)
     ``` 
 
-    @param properties table<string, table<string, any>>
+    @param properties table<string, table<ValueType, any>>
 ]=]
 function WrappedInstance:Add(properties) end
 

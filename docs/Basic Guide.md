@@ -20,14 +20,14 @@ workspace:Add({
     },
 
     GetNewString = {
-        Method = function()
-            return workspace.NewString
+        Method = function(self)
+            return self.NewString
         end
     },
 
     onNewStringChanged = {
         ---@param signal Signal -- This is for IntelliSense
-        Event = function(signal)
+        Event = function(signal) -- This function will be the signal's fire handler.
             repeat
             task.wait()
             until signal.__callbacks[1] -- Waits until a callback is connected

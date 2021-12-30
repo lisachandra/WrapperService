@@ -4,6 +4,12 @@
 
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.3.3 - 2021-12-29
+
+### Removed
+
+- switch module
+
 ## 0.3.2 - 2021-12-24
 
 ### Added
