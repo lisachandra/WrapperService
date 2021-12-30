@@ -2,8 +2,10 @@ local _WaitForGame = game:IsLoaded() or game.Loaded:Wait()
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
+local Packages = ReplicatedStorage:WaitForChild("Packages")
+
 ---@type WrapperService
-local WrapperService = require(ReplicatedStorage:WaitForChild("WrapperService"))
+local WrapperService = require(Packages:WaitForChild("WrapperService"))
 
 WrapperService:new(workspace)
 local workspace = WrapperService:GetWrappedInstance(workspace)

@@ -1,7 +1,7 @@
 --#selene: allow(undefined_variable)
 return function()
-    ---@type WrapperService
-    local WrapperService = require(script.Parent.Parent:WaitForChild("WrapperService"))
+    local Packages = script.Parent.Parent:WaitForChild("Packages")
+    local WrapperService = require(Packages:WaitForChild("WrapperService"))
 
     describe("isWrapped", function()
         it("should return true", function()

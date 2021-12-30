@@ -5,9 +5,10 @@
 
         "ReplicatedStorage": {
             "$className": "ReplicatedStorage",
-            "WrapperService": {
+
+            "Packages": {
                 "$ignoreUnknownInstances": true,
-                "$path": "src"
+                "$path": "Packages"
             },
 
             "Tests": {
@@ -15,7 +16,7 @@
                 "$path": "test"
             }
         },
-
+        
         "StarterPlayer": {
             "$className": "StarterPlayer",
             "StarterPlayerScripts": {

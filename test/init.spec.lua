@@ -1,6 +1,7 @@
 --#selene: allow(undefined_variable)
 return function()
-    local WrapperService = require(script.Parent.Parent:WaitForChild("WrapperService"))
+    local Packages = script.Parent.Parent:WaitForChild("Packages")
+    local WrapperService = require(Packages:WaitForChild("WrapperService"))
 
     beforeAll(function(context)
         context.wrappedInstances = {}
