@@ -4,6 +4,12 @@
 
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.3.4 - 2021-12-30
+
+### Changed
+
+- Added [SignalService](https://wally.run/package/zxibs/signalservice) to the dependencies list in [wally.toml](https://github.com/zxibs/WrapperService/blob/main/src/wally.toml)
+
 ## 0.3.3 - 2021-12-29
 
 ### Removed
