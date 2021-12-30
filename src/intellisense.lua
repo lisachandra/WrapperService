@@ -49,7 +49,7 @@ function WrapperService.isWrapped(instanceToCheck) end
 local WrappedInstance = {}
 
 --- Adds properties to the instance (Event/Method/Property)
----@param properties Dictionary
+---@param properties table<string, table<string, any>>
 function WrappedInstance:Add(properties) end
 
 --- Destroys/Cleans the wrapped instance for GC
