@@ -876,7 +876,7 @@ end
 
 do
 	local arrayKeysCheck = t.keys(t.integer)
-	--[[**
+--[[**
 		ensures value is an array and all values of the array match check
 
 		@param check The check to compare all values with
@@ -916,7 +916,7 @@ do
 		end
 	end
 
-	--[[**
+--[[**
 		ensures value is an array of a strict makeup and size
 
 		@param check The check to compare all values with
@@ -952,7 +952,7 @@ end
 
 do
 	local callbackArray = t.array(t.callback)
-	--[[**
+--[[**
 		creates a union type
 
 		@param ... The checks to union
@@ -974,12 +974,12 @@ do
 		end
 	end
 
-	--[[**
+--[[**
 		Alias for t.union
 	**--]]
 	t.some = t.union
 
-	--[[**
+--[[**
 		creates an intersection type
 
 		@param ... The checks to intersect
@@ -1002,7 +1002,7 @@ do
 		end
 	end
 
-	--[[**
+--[[**
 		Alias for t.intersection
 	**--]]
 	t.every = t.intersection
@@ -1010,7 +1010,7 @@ end
 
 do
 	local checkInterface = t.map(t.any, t.callback)
-	--[[**
+--[[**
 		ensures value matches given interface definition
 
 		@param checkTable The interface definition
@@ -1036,7 +1036,7 @@ do
 		end
 	end
 
-	--[[**
+--[[**
 		ensures value matches given interface definition strictly
 
 		@param checkTable The interface definition
@@ -1169,7 +1169,7 @@ end
 do
 	local checkWrap = t.tuple(t.callback, t.callback)
 
-	--[[**
+--[[**
 		wraps a callback in an assert with checkArgs
 
 		@param callback The function to wrap
@@ -1202,7 +1202,7 @@ end
 do
 	local checkChildren = t.map(t.string, t.callback)
 
-	--[[**
+--[[**
 		Takes a table where keys are child names and values are functions to check the children against.
 		Pass an instance tree into the function.
 		If at least one child passes each check, the overall check passes.

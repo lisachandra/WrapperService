@@ -1,7 +1,7 @@
 local SignalService = require(script.Parent.Parent:WaitForChild("SignalService"))
 local WrapperService = require(script.Parent)
 
-local t = require(script.Parent:WaitForChild("t"))
+local t = require(script.Parent.Parent:WaitForChild("t"))
 
 local VALUE_TYPES = {
 	Property = "any",

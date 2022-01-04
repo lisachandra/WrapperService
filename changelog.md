@@ -4,6 +4,16 @@
 
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.3.5 - 2022-01-04
+
+### Added
+
+- WrappedInstance and WrapperService types to init.lua
+
+### Removed
+
+- intellisense module
+
 ## 0.3.4 - 2021-12-30
 
 ### Changed
