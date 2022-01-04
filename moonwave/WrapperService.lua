@@ -14,7 +14,6 @@ local WrapperService = {}
 --[=[
     Creates a wrapped instance.
     ```lua
-    ---@type WrappedInstance | Workspace -- This is for IntelliSense
     local workspace = WrapperService:new(workspace)
     ```
 
@@ -28,7 +27,6 @@ function WrapperService:new(instanceToWrap) end
     ```lua
     WrapperService:new(workspace)
 
-    ---@type WrappedInstance | Workspace -- This is for IntelliSense
     local workspace = WrapperService:GetWrappedInstance(workspace)
     ```
 
@@ -64,8 +62,7 @@ local WrappedInstance = {}
 --[=[
     Destroys/Cleans the wrapped instance for GC  
     Returns the unwrapped version of the wrapped instance  
-    ```lua
-    ---@type WrappedInstance | Workspace
+    ```lua  
     local workspace = WrapperService:new(workspace)
 
     local normalWorkspace: Workspace = workspace:Cleanup()
@@ -78,7 +75,6 @@ function WrappedInstance:Cleanup() end
 --[=[
     Adds properties to the instance (Event/Method/Property)  
     ```lua
-    ---@type WrappedInstance | Workspace -- This is for IntelliSense
     local workspace = WrapperService:new(workspace)
 
     workspace:Add({
@@ -93,7 +89,6 @@ function WrappedInstance:Cleanup() end
         }
 
         NewEvent = {
-            ---@param signal Signal -- This is for IntelliSense
             Event = function(signal) -- This function will be the signal's fire handler.
                 while true do
                     task.wait(5)

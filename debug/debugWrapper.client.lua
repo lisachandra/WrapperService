@@ -4,7 +4,6 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local Packages = ReplicatedStorage:WaitForChild("Packages")
 
----@type WrapperService
 local WrapperService = require(Packages:WaitForChild("WrapperService"))
 
 WrapperService:new(workspace)
@@ -33,7 +32,6 @@ end)
 
 print(workspace.NewProperty)
 
----@type Workspace
 workspace = workspace:Cleanup()
 print(WrapperService.isWrapped(workspace))
 print(WrapperService.__wrappedInstances[id])

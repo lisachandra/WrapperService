@@ -8,7 +8,6 @@ First we need to wrap the workspace.
     (For people that use EmmyLua, Roblox LSP, sumneko's lua language server, etc.)
 ]]
 
----@type WrappedInstance | Workspace
 local workspace = WrapperService:new(workspace)
 ```
 Now we have created a wrapped version of the workspace,
@@ -26,7 +25,6 @@ workspace:Add({
     },
 
     onNewStringChanged = {
-        ---@param signal Signal -- This is for IntelliSense
         Event = function(signal) -- This function will be the signal's fire handler.
             repeat
             task.wait()

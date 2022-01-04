@@ -22,7 +22,6 @@ return function()
 
     describe("cleanup", function()
         it("should destroy the WrappedInstance", function()
-            ---@type WrappedInstance | Workspace
             local workspace = WrapperService:new(workspace)
             local id = workspace.__id
             workspace = workspace:Cleanup()
@@ -34,14 +33,12 @@ return function()
     
     describe("new", function()
         it("should create a WrappedInstance", function(context)
-            ---@type WrappedInstance | Workspace
             local workspace = WrapperService:new(workspace)
             context.addWrappedInstance(workspace)
             expect(WrapperService.isWrapped(workspace)).to.be.equal(true)
         end)
 
         it("should connect to an event", function(context)
-            ---@type WrappedInstance | Workspace
             local workspace = WrapperService:new(workspace)
             context.addWrappedInstance(workspace)
 
@@ -54,14 +51,12 @@ return function()
         end)
 
         it("should return the name as Workspace", function(context)
-            ---@type WrappedInstance | Workspace
             local workspace = WrapperService:new(workspace)
             context.addWrappedInstance(workspace)
             expect(workspace.Name).to.be.equal("Workspace")
         end)
 
         it("should modify the gravity to 1", function(context)
-            ---@type WrappedInstance | Workspace
             local workspace = WrapperService:new(workspace)
             context.addWrappedInstance(workspace)
             context.addRevertableChanges("Gravity", {
@@ -74,7 +69,6 @@ return function()
         end)
 
         it("should find the baseplate and modify its children", function(context)
-            ---@type WrappedInstance | Workspace
             local workspace = WrapperService:new(workspace)
             context.addWrappedInstance(workspace)
             local baseplate = workspace:FindFirstChild("Baseplate")
@@ -104,7 +98,6 @@ return function()
 
     describe("add", function()
         it("should make a new property and a method", function(context)
-            ---@type WrappedInstance | Workspace
             local workspace = WrapperService:new(workspace)
             context.addWrappedInstance(workspace)
 
@@ -125,7 +118,6 @@ return function()
         end)
 
         it("should make a new event and fire with the correct arguments", function(context)
-            ---@type WrappedInstance | Workspace
             local workspace = WrapperService:new(workspace)
             context.addWrappedInstance(workspace)
 
@@ -146,7 +138,6 @@ return function()
 
     describe("waitForProperty", function()
         it("should wait for a property", function(context)
-            ---@type WrappedInstance | Workspace
             local workspace = WrapperService:new(workspace)
             context.addWrappedInstance(workspace)
 
@@ -170,7 +161,6 @@ return function()
         end)
 
         it("should timeout while waiting for a property", function(context)
-            ---@type WrappedInstance | Workspace
             local workspace = WrapperService:new(workspace)
             context.addWrappedInstance(workspace)
 

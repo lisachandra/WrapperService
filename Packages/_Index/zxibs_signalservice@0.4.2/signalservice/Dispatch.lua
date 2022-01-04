@@ -1,5 +1,5 @@
 local SignalService = require(script.Parent)
-local t = require(script.Parent:WaitForChild("t"))
+local t = require(script.Parent.Parent:WaitForChild("t"))
 
 local dispatchCheck = t.tuple(
 	SignalService.isSignal,
