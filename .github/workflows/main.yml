@@ -27,7 +27,8 @@ jobs:
         run: |
           stylua src/
 
-      - name: Commit changes
+      - name: Push changes
+        if: steps.git-check.outputs.modified == 'true'
         shell: bash
         run: |
           rm -rf .foreman-install
