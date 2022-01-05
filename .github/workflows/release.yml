@@ -23,9 +23,8 @@ jobs:
         env:
           WALLY_AUTH: ${{ secrets.WALLY_AUTH }}
         run: |
-          rm -rf .foreman-install
           mkdir -p ~/.wally
-          echo $WALLY_AUTH > ~/.wally/auth.toml
+          echo -e '[tokens]\n"https://api.wally.run/" = "$WALLY_AUTH"' > ~/.wally/auth.toml
           wally publish
 
       - name: Install WrapperService
