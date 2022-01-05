@@ -1,0 +1,50 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    name: Build and Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install required tools
+      - uses: Roblox/setup-foreman@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish release to Wally
+        shell: bash
+        env:
+          WALLY_AUTH: ${{ secrets.WALLY_AUTH }}
+        run: |
+          mkdir -p ~/.wally
+          echo "$WALLY_AUTH" > ~/.wally/auth.toml
+          wally publish
+
+      - name: Install WrapperService
+        run: |
+          cd publish
+          wally install
+
+      - name: Build place file
+        run: |
+          rojo build publish.project.json -o WrapperService.rbxl
+
+      - name: Generate .rbxm file
+        run: |
+          remodel run generateRBXMFile.lua
+          cd ..
+      
+      - name: Publish release to github
+        uses: softprops/action-gh-release@v1
+        with:
+          fail_on_unmatched_files: true,
+          body_path: releaseNote.md
+          files: |
+             WrapperService.rbxm

@@ -1,0 +1,35 @@
+name: Lint and Format using Selene and StyLua
+
+on: 
+  push:
+    branches:
+      - main
+  workflow_dispatch
+
+jobs:
+  main:
+    name: Lint and Format
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+      - uses: actions/checkout@v2
+
+      - name: Install required tools
+      - uses: Roblox/setup-foreman@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Lint using Selene
+        run: |
+          selene src
+
+      - name: Format code using StyLua
+        run: |
+          stylua src/
+
+      - name: Commit changes
+        run: |
+          git config --global user.name 'Github Actions'
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+          git commit -m "Formatted code using StyLua"
+          git push
