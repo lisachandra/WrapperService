@@ -1,8 +1,13 @@
 [package]
-name = "zxibs/wrapperservice-test"
-version = "0.1.0"
-registry = "https://github.com/UpliftGames/wally-index"
+name = "zxibs/wrapperservice"
+description = "This service allows you to create custom properties for roblox instances, see the documentation for more info: https://zxibs.github.io/WrapperService/ github: https://github.com/zxibs/WrapperService"
+version = "0.3.6"
+license = "MIT"
 realm = "shared"
+registry = "https://github.com/upliftgames/wally-index"
+exclude = ["*"]
+include = ["LICENSE.md", "README.md", "src", "src/**", "wally.toml", "default.project.json"]
 
 [dependencies]
-WrapperService = "zxibs/wrapperservice@^0"
+SignalService = "zxibs/signalservice@^0"
+t = "osyrisrblx/t@^3"
