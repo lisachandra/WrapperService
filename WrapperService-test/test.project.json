@@ -1,5 +1,5 @@
 {
-    "name": "WrapperService-test",
+    "name": "wrapperservice-test",
     "tree": {
         "$className": "DataModel",
 
@@ -13,16 +13,7 @@
 
             "Tests": {
                 "$ignoreUnknownInstances": true,
-                "$path": "test"
-            }
-        },
-        
-        "StarterPlayer": {
-            "$className": "StarterPlayer",
-            "StarterPlayerScripts": {
-                "$className": "StarterPlayerScripts",
-                "$ignoreUnknownInstances": true,
-                "$path": "debug"
+                "$path": "Tests"
             }
         }
     }
