@@ -21,15 +21,17 @@ jobs:
 
       - name: Lint using Selene
         run: |
-          selene src
+          selene src/
 
       - name: Format code using StyLua
         run: |
           stylua src/
 
       - name: Commit changes
+        shell: bash
         run: |
+          rm -rf .foreman-install
           git config --global user.name 'Github Actions'
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-          git commit -m "Formatted code using StyLua"
+          git commit -a -m "Formatted code using StyLua"
           git push
