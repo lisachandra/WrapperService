@@ -54,4 +54,4 @@ jobs:
           fail_on_unmatched_files: true
           body_path: ReleaseNote.md
           files: |
-             /publish/WrapperService.rbxm
+             publish/WrapperService.rbxm
