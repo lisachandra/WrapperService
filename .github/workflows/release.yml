@@ -1,19 +1,15 @@
 name: Release
 
-on:
-  push:
-    tags:
-      - 'v*'
+on: workflow_dispatch
 
 jobs:
   test:
     name: test echo output
     runs-on: ubuntu-latest
   steps:
-    - name: return echo output
+    - name: echo
       shell: bash
       env:
         WALLY_AUTH: ${{ secrets.WALLY_AUTH }}
       run: |
         echo -e '[tokens]\n"https://api.wally.run/" = "$WALLY_AUTH"'
-        
