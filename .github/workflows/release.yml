@@ -38,15 +38,15 @@ jobs:
         run: |
           rojo build publish.project.json -o WrapperService.rbxl
 
-      - name: Generate .rbxm file
+      - name: Create .rbxm file
+        shell: bash
         run: |
-          remodel run generateRBXMFile.lua
-          cd ..
+          remodel run createRBXMFile.lua
       
       - name: Publish release to github
         uses: softprops/action-gh-release@v1
         with:
-          fail_on_unmatched_files: true,
-          body_path: releaseNote.md
+          fail_on_unmatched_files: true
+          body_path: ReleaseNote.md
           files: |
              WrapperService.rbxm
