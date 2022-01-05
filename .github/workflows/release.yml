@@ -25,7 +25,7 @@ jobs:
           WALLY_AUTH: ${{ secrets.WALLY_AUTH }}
         run: |
           mkdir -p ~/.wally
-          echo -e '[tokens]\n"https://api.wally.run/" = '"\"$WALLY_AUTH\"" > ~/.wally/auth.toml
+          echo "$WALLY_AUTH" > ~/.wally/auth.toml
           wally publish
 
       - name: Install WrapperService
