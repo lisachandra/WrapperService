@@ -6,21 +6,21 @@ local t = require(script.Parent.Parent:WaitForChild("t"))
 local VALUE_TYPES = {
 	Property = "any",
 	Method = "callback",
-	Event = "callback"
+	Event = "callback",
 }
 
 local addCheck = t.tuple(
 	WrapperService.isWrapped,
 	t.map(t.string, function(propertyContentsToCheck)
 		for valueType: string in pairs(propertyContentsToCheck) do
-			if VALUE_TYPES[valueType] then			
+			if VALUE_TYPES[valueType] then
 				return t.interface({
-					[valueType] = t[VALUE_TYPES[valueType]]
+					[valueType] = t[VALUE_TYPES[valueType]],
 				})(propertyContentsToCheck)
-			else			
+			else
 				return false, string.format("(field ValueType expected, got %s) \nValid ValueTypes: Property, Method and Event", valueType)
 			end
-		end 
+		end
 	end)
 )
 
@@ -33,14 +33,14 @@ local function Add(self, properties)
 				Property = function()
 					return value
 				end,
-		
+
 				Event = function()
 					local Signal = SignalService.new()
 					coroutine.wrap(value)(Signal)
-		
+
 					return Signal
 				end,
-		
+
 				Method = function()
 					return function(_self, ...)
 						if _self ~= self then
@@ -49,7 +49,7 @@ local function Add(self, properties)
 							return value(_self, ...)
 						end
 					end
-				end
+				end,
 			}
 
 			local propertyValue = values[valueType]
