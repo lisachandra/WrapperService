@@ -33,15 +33,20 @@ jobs:
         run: |
           cd publish
           wally install
+          cd ..
 
       - name: Build place file
         run: |
+          cd publish
           rojo build publish.project.json -o WrapperService.rbxl
+          cd ..
 
       - name: Create .rbxm file
         shell: bash
         run: |
+          cd publish
           remodel run createRBXMFile.lua
+          cd ..
       
       - name: Publish release to github
         uses: softprops/action-gh-release@v1
@@ -49,4 +54,4 @@ jobs:
           fail_on_unmatched_files: true
           body_path: ReleaseNote.md
           files: |
-             WrapperService.rbxm
+             /publish/WrapperService.rbxm
