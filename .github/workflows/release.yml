@@ -47,6 +47,11 @@ jobs:
           cd publish
           remodel run createRBXMFile.lua
           cd ..
+
+      - name: Create .zip file
+        uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r publish/WrapperService.zip publish/Packages
       
       - name: Publish release to github
         uses: softprops/action-gh-release@v1
@@ -55,3 +60,4 @@ jobs:
           body_path: publish/ReleaseNote.md
           files: |
               publish/WrapperService.rbxm
+              publish/WrapperService.zip
