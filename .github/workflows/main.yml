@@ -21,6 +21,8 @@ jobs:
 
       - name: Lint using Selene
         run: |
+          rm -f roblox.toml
+          selene generate-roblox-std
           selene src/
 
       - name: Format code using StyLua

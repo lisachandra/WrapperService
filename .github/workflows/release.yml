@@ -25,7 +25,7 @@ jobs:
           WALLY_AUTH: ${{ secrets.WALLY_AUTH }}
         run: |
           mkdir -p ~/.wally
-          echo "$WALLY_AUTH" > ~/.wally/auth.toml
+          echo -e '[tokens]\n"https://api.wally.run/" = '"\"$WALLY_AUTH\"" > ~/.wally/auth.toml
           wally publish
 
       - name: Install WrapperService
@@ -49,9 +49,12 @@ jobs:
           cd ..
 
       - name: Create .zip file
-        uses: montudor/action-zip@v1
-        with:
-          args: zip -qq -r publish/WrapperService.zip publish/Packages
+        shell: bash
+        run: |
+          cd publish
+          sudo apt-get install zip
+          zip -r WrapperService.zip Packages
+          cd ..
       
       - name: Publish release to github
         uses: softprops/action-gh-release@v1
