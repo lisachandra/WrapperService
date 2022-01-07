@@ -31,14 +31,13 @@ jobs:
 
       - name: Check for modified files in folder src
         id: git-check
-        run: echo ::set-output name=modified::$(if git diff-index --quiet HEAD main -- src; then echo "false"; else echo "true"; fi)
+        run: echo ::set-output name=modified::$(if git diff --quiet HEAD main -- src; then echo "false"; else echo "true"; fi)
 
       - name: Push changes
         if: steps.git-check.outputs.modified == 'true'
-        shell: bash
         run: |
-          rm -rf .foreman-install
           git config --global user.name 'Github Actions'
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-          git commit -a -m "Formatted code using StyLua"
+          git add src
+          git commit -m "Formatted code using StyLua"
           git push
