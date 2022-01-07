@@ -26,7 +26,7 @@ jobs:
           VERSION: ${{ github.ref_name }}
         run: |
           mkdir -p ~/.wally
-          echo "$WALLY_AUTH" > ~/.wally/auth.toml
+          echo $WALLY_AUTH > ~/.wally/auth.toml
           sed -i 's/.*version.*/version = '"\"$VERSION\""'/' wally.toml
           cat ~/.wally/auth.toml
           cat wally.toml
@@ -62,6 +62,7 @@ jobs:
       - name: Publish release to github
         uses: softprops/action-gh-release@v1
         with:
+          name: v${{ github.ref_name }}
           fail_on_unmatched_files: true
           body_path: publish/RELEASE_NOTE.md
           files: |
