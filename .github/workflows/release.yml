@@ -61,8 +61,8 @@ jobs:
         run: |
           python3 publish/get_changes.py changelog.md > publish/CHANGES.md
           cd publish
-          sed -i 's/(rbxm)/(https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/WrapperService.rbxm)' RELEASE_NOTE.md
-          sed -i 's/(zip)/(https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/WrapperService.zip)' RELEASE_NOTE.md
+          sed -i 's|(rbxm)|(https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/WrapperService.rbxm)|' RELEASE_NOTE.md
+          sed -i 's|(zip)|(https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/WrapperService.zip)|' RELEASE_NOTE.md
           cat CHANGES.md >> RELEASE_NOTE.md
           cd ..
       
