@@ -1,0 +1,71 @@
+name: Bump version and create changelog based on commits
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'The new version for bumping ex: 1.0.0'
+        required: true
+        type: string
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install required tools
+        uses: Roblox/setup-foreman@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+        
+      - name: Bump version
+        shell: bash
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          sed -i 's/.*version.*/version = '"\"$VERSION\""'/' wally.toml
+
+      - name: Create changelog
+        shell: bash
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          LAST_TAG=$(git describe --tags --abbrev=0)
+          DATE=$(date +%F)
+          git config --global alias.changelog "log --pretty=format:'- %s by @%an (%h)' --abbrev-commit"
+          CHANGES='
+          ## v'"$VERSION"'' - '"$DATE"'
+
+          ### Added
+
+          '"$(git changelog --grep="ADDED:" $LAST_TAG..HEAD -- src/*.lua)"'
+
+          ### Changed
+
+          '"$(git changelog --grep="CHANGED:" $LAST_TAG..HEAD -- src/*.lua)"'
+
+          ### Removed
+
+          '"$(git changelog --grep="REMOVED:" $LAST_TAG..HEAD -- src/*.lua)"'
+
+          ### Fixed
+
+          '"$(git changelog --grep="FIXED:" $LAST_TAG..HEAD -- src/*.lua)"'
+
+          '
+          sed -i "s6//$CHANGES/" CHANGELOG.md
+
+      - name: Create tag for release
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          git tag -a $VERSION -m "New release for v$VERSION"
+
+      - name: Push changes
+        run: |
+          git config --global user.name 'Github Actions'
+          git add CHANGELOG.md wally.toml
+          git commit -m "Bumped version to ${{ inputs.version }} and added a changelog for it"
+          git push --tags
