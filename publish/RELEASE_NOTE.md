@@ -2,13 +2,13 @@
 
 ## [Roblox Studio](https://roblox.com/create)
 
-- Install WrapperService.rbxm (below this release note)
+- Install [WrapperService.rbxm](rbxm)
 - Drag and drop the file to Roblox Studio
 - Move the file to ReplicatedStorage
 
 ## [Rojo](https://rojo.space/)
 
-- Install WrapperService.zip (below this release note)
+- Install [WrapperService.zip](zip)
 - Right-click WrapperService.zip and click `Extract here`
 - Drag and drop the Packages folder to your editor
 - Use [Rojo](https://rojo.space/) to sync the files into a place
@@ -20,4 +20,4 @@
 - Run wally install in your terminal
 - Use [Rojo](https://rojo.space/) to sync the files into a place
 
-# [Full Changelog](/changelog.md)
+# [Changelog](/changelog.md)

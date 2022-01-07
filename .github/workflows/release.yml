@@ -13,8 +13,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        with:
-          ref: ${{ github.ref }}
 
       - name: Install required tools
         uses: Roblox/setup-foreman@v1
@@ -29,7 +27,6 @@ jobs:
         run: |
           mkdir -p ~/.wally
           echo "$WALLY_AUTH" > ~/.wally/auth.toml
-          sed -i 's/.*version.*/version = '"\"$VERSION\""'/' wally.toml
           wally publish
 
       - name: Install WrapperService
@@ -58,6 +55,16 @@ jobs:
           cd publish
           zip -r WrapperService.zip Packages
           cd ..
+
+      - name: Create release note
+        shell: bash
+        run: |
+          cd publish
+          python3 get_changelog.py /CHANGELOG.md > CHANGES.md
+          sed -i 's/(rbxm)/(https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/WrapperService.rbxm)' RELEASE_NOTE.md
+          sed -i 's/(zip)/(https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/WrapperService.zip)' RELEASE_NOTE.md
+          cat CHANGES.md >> RELEASE_NOTE.md
+          cd ..
       
       - name: Publish release to github
         uses: softprops/action-gh-release@v1
@@ -68,16 +75,3 @@ jobs:
           files: |
               publish/WrapperService.rbxm
               publish/WrapperService.zip
-
-      - name: Check if version was bumped in wally.toml
-        id: git-check
-        run: echo ::set-output name=modified::$(if git diff --quiet HEAD main -- wally.toml; then echo "false"; else echo "true"; fi)
-
-      - name: Push changes
-        if: steps.git-check.outputs.modified == 'true'
-        run: |
-          git config --global user.name 'Github Actions'
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-          git add wally.toml
-          git commit -m "Bumped version to ${{ github.ref_name }}"
-          git push
