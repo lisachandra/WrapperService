@@ -59,8 +59,8 @@ jobs:
       - name: Create release note
         shell: bash
         run: |
+          python3 publish/get_changes.py CHANGELOG.md > publish/CHANGES.md
           cd publish
-          python3 get_changes.py ../CHANGELOG.md > CHANGES.md
           sed -i 's/(rbxm)/(https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/WrapperService.rbxm)' RELEASE_NOTE.md
           sed -i 's/(zip)/(https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/WrapperService.zip)' RELEASE_NOTE.md
           cat CHANGES.md >> RELEASE_NOTE.md
