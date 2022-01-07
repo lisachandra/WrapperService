@@ -26,7 +26,7 @@ jobs:
           VERSION: ${{ github.ref_name }}
         run: |
           mkdir -p ~/.wally
-          echo $WALLY_AUTH > ~/.wally/auth.toml
+          echo "$WALLY_AUTH" > ~/.wally/auth.toml
           sed -i 's/.*version.*/version = '"\"$VERSION\""'/' wally.toml
           wally publish
 
