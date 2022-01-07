@@ -1,4 +1,4 @@
-name: Lint and Format using Selene and StyLua
+name: CI
 
 on: 
   push:
@@ -7,14 +7,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  main:
+  ci:
     name: Lint and Format
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-        with:
-          ref: ${{ github.ref }}
 
       - name: Install required tools
         uses: Roblox/setup-foreman@v1
@@ -31,7 +29,7 @@ jobs:
         run: |
           stylua src/
 
-      - name: Check for modified files in folder src
+      - name: Check for modified files in src
         id: git-check
         run: echo ::set-output name=modified::$(if git diff --quiet HEAD main -- src; then echo "false"; else echo "true"; fi)
 
@@ -39,7 +37,6 @@ jobs:
         if: steps.git-check.outputs.modified == 'true'
         run: |
           git config --global user.name 'Github Actions'
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-          git add src
+          git add src/
           git commit -m "Formatted code using StyLua"
           git push
