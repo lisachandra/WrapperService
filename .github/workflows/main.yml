@@ -37,7 +37,6 @@ jobs:
         if: steps.git-check.outputs.modified == 'true'
         run: |
           git config --global user.name 'Github Actions'
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
           git add src
           git commit -m "Formatted code using StyLua"
-          git push origin main
+          git push
