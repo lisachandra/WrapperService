@@ -72,9 +72,10 @@ jobs:
         run: echo ::set-output name=modified::$(if git diff --quiet HEAD main -- wally.toml; then echo "false"; else echo "true"; fi)
 
       - name: Push changes
+        if: steps.git-check.outputs.modified == 'true'
         run: |
           git config --global user.name 'Github Actions'
           git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
           git add wally.toml
           git commit -m "Bumped version to ${{ github.ref_name }}"
-          git push
+          git push origin main
