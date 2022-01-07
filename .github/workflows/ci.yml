@@ -31,7 +31,7 @@ jobs:
 
       - name: Check for modified files in src
         id: git-check
-        run: echo ::set-output name=modified::$(if git diff --quiet HEAD main -- src; then echo "false"; else echo "true"; fi)
+        run: echo ::set-output name=modified::$(if git diff --quiet HEAD -- src; then echo "false"; else echo "true"; fi)
 
       - name: Push changes
         if: steps.git-check.outputs.modified == 'true'
