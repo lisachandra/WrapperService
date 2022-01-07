@@ -28,8 +28,6 @@ jobs:
           mkdir -p ~/.wally
           echo $WALLY_AUTH > ~/.wally/auth.toml
           sed -i 's/.*version.*/version = '"\"$VERSION\""'/' wally.toml
-          cat ~/.wally/auth.toml
-          cat wally.toml
           wally publish
 
       - name: Install WrapperService
