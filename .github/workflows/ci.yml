@@ -36,7 +36,7 @@ jobs:
       - name: Push changes
         if: steps.git-check.outputs.modified == 'true'
         run: |
-          git config --global user.name 'Github Actions'
+          git config --global user.name 'github-actions'
           git add src/
           git commit -m "Formatted code using StyLua"
           git push
