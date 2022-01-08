@@ -35,27 +35,8 @@ jobs:
           LAST_TAG=$(git describe --tags --abbrev=0)
           DATE=$(date +%F)
           git config --global alias.changelog "log --pretty=format:'- %s by @%an (%h)' --abbrev-commit"
-          CHANGES='
-          ## v'"$VERSION"'' - '"$DATE"'
-
-          ### Added
-
-          '"$(git changelog --grep="ADDED:" $LAST_TAG..HEAD -- src/*.lua)"'
-
-          ### Changed
-
-          '"$(git changelog --grep="CHANGED:" $LAST_TAG..HEAD -- src/*.lua)"'
-
-          ### Removed
-
-          '"$(git changelog --grep="REMOVED:" $LAST_TAG..HEAD -- src/*.lua)"'
-
-          ### Fixed
-
-          '"$(git changelog --grep="FIXED:" $LAST_TAG..HEAD -- src/*.lua)"'
-
-          '
-          sed -i "s6//$CHANGES/" CHANGELOG.md
+          CHANGES='\n## v'"$VERSION"'' - '"$DATE"'\n### Added\n\n'"$(git changelog --grep="ADDED:" $LAST_TAG..HEAD -- src/*.lua)"'\n\n### Changed\n\n'"$(git changelog --grep="CHANGED:" $LAST_TAG..HEAD -- src/*.lua)"'\n\n### Removed\n\n'"$(git changelog --grep="REMOVED:" $LAST_TAG..HEAD -- src/*.lua)"'\n\n### Fixed\n\n'"$(git changelog --grep="FIXED:" $LAST_TAG..HEAD -- src/*.lua)"'\n'
+          sed -i -e "6s/.*.*/$CHANGES/" changelog.md
 
       - name: Create tag for release
         env:
@@ -65,7 +46,7 @@ jobs:
 
       - name: Push changes
         run: |
-          git config --global user.name 'Github Actions'
-          git add CHANGELOG.md wally.toml
+          git config --global user.name 'github-actions'
+          git add changelog.md wally.toml
           git commit -m "Bumped version to ${{ inputs.version }} and added a changelog for it"
           git push --tags
