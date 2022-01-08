@@ -23,7 +23,6 @@ jobs:
         shell: bash
         env:
           WALLY_AUTH: ${{ secrets.WALLY_AUTH }}
-          VERSION: ${{ github.ref_name }}
         run: |
           mkdir -p ~/.wally
           echo "$WALLY_AUTH" > ~/.wally/auth.toml
