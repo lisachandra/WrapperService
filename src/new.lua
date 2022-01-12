@@ -9,13 +9,9 @@ local newCheck = t.tuple(function(selfToCheck)
 end, t.Instance)
 
 local function createId(self)
-	local id = tostring(Random.new():NextInteger(0, math.huge))
+	math.randomseed(#self.__wrappedInstances)
 
-	if self.__wrappedInstances[id] then
-		return createId()
-	else
-		return id
-	end
+    return math.random(math.huge, 1)
 end
 
 local function new(self, instanceToWrap)

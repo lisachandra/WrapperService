@@ -105,15 +105,15 @@ return function()
                     Property = "This is a new property!"
                 },
 
-                GetRandomIntegerBetweenNumberOfChildren = {
+                GetInteger = {
                     Method = function()
-                        return Random.new():NextInteger(1, #workspace:GetChildren())
+                        return 1
                     end
                 }
             })
 
             expect(workspace.NewProperty).to.be.equal("This is a new property!")
-            expect(workspace:GetRandomIntegerBetweenNumberOfChildren()).to.be.a("number")
+            expect(workspace:GetInteger()).to.be.a("number")
         end)
 
         it("should make a new event and fire with the correct arguments", function(context)
@@ -123,7 +123,7 @@ return function()
             workspace:Add({
                 AutomaticEvent = {
                     Event = function(signal)
-                        task.wait(1)
+                        wait(1)
                         signal:Fire("fired!")
                     end
                 }
@@ -148,13 +148,14 @@ return function()
                 }
             })
 
-            task.delay(1, function()
+            coroutine.wrap(function()
+                wait(0.25)
                 workspace:Add({
                     NewProperty = {
                         Property = "This is a new property!"
                     },
                 })
-            end)
+            end)()
 
             expect(workspace:GetNewProperty()).to.be.equal("This is a new property!")
         end)

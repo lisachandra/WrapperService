@@ -12,7 +12,7 @@ local VALUE_TYPES = {
 local addCheck = t.tuple(
 	WrapperService.isWrapped,
 	t.map(t.string, function(propertyContentsToCheck)
-		for valueType: string in pairs(propertyContentsToCheck) do
+		for valueType in pairs(propertyContentsToCheck) do
 			if VALUE_TYPES[valueType] then
 				return t.interface({
 					[valueType] = t[VALUE_TYPES[valueType]],

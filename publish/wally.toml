@@ -1,8 +1,0 @@
-[package]
-name = "zxibs/wrapperservice-publish"
-version = "0.1.0"
-registry = "https://github.com/UpliftGames/wally-index"
-realm = "shared"
-
-[dependencies]
-WrapperService = "zxibs/wrapperservice@^0"

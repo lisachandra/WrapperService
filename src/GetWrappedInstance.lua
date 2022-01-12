@@ -17,6 +17,7 @@ local function GetWrappedInstance(self, instanceToGet)
 		end
 	end
 
+    warn("No wrapped instance found for "..instanceToGet.Name)
 	return nil
 end
 
