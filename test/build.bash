@@ -7,9 +7,12 @@ cd test
 cat DEPENDENCIES.toml >> wally.toml
 wally install
 
-DEPENDENCIES_LIST=$(ls Packages/_Index)
+if [ ! -d "Packages" ]; then
+    mkdir Packages
+    mkdir Packages/_Index
+fi
 
-cd ..
+DEPENDENCIES_LIST=$(ls Packages/_Index)
 
 declare -A DEPENDENCIES
 
@@ -17,17 +20,12 @@ while IFS= read -r line; do
     KEY=$(awk -v LINE="$line" -F'[@/"]' '{if (NR == LINE); print $2 "_" $3}' DEPENDENCIES.toml)
     VALUE=$(awk -v LINE="$line" '{if (NR == LINE); print $1}' DEPENDENCIES.toml)
 
-    DEPENDENCIES+=([${KEY}]=${VALUE})
-done < test/DEPENDENCIES.toml
+    DEPENDENCIES+=(["$KEY"]="$VALUE")
+done < DEPENDENCIES.toml
 
-if [ ! -d "test/Packages" ]; then
-    mkdir test/Packages
-    mkdir test/Packages/_Index
-fi
+mkdir Packages/_Index/zxibs_wrapperservice
 
-mkdir test/Packages/_Index/zxibs_wrapperservice
-
-cd test/Packages/_Index/zxibs_wrapperservice
+cd Packages/_Index/zxibs_wrapperservice
 
 for key in ${!DEPENDENCIES[@]}; do
     DEPENDENCY_NAME=$(echo "$key" | awk -v FS=_ 'print $2')
