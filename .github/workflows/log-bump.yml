@@ -6,7 +6,7 @@ on:
       version:
         description: 'The new version for bumping ex: 1.0.0'
         required: true
-        type: string
+        type: number
 
 jobs:
   main:
@@ -14,6 +14,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
+      - name: Get repo history
+        run: git fetch --prune --unshallow
 
       - name: Install required tools
         uses: Roblox/setup-foreman@v1
@@ -23,30 +26,27 @@ jobs:
       - name: Bump version
         shell: bash
         env:
-          VERSION: ${{ inputs.version }}
+          VERSION: ${{ github.event.inputs.version }}
         run: |
           sed -i 's/.*version.*/version = '"\"$VERSION\""'/' wally.toml
 
       - name: Create changelog
         shell: bash
         env:
-          VERSION: ${{ inputs.version }}
+          VERSION: ${{ github.event.inputs.version }}
+          REPOSITORY: ${{ github.repository }}
         run: |
-          LAST_TAG=$(git describe --tags --abbrev=0)
-          DATE=$(date +%F)
-          git config --global alias.changelog "log --pretty=format:'- %s by @%an (%h)' --abbrev-commit"
-          CHANGES='\n## v'"$VERSION"'' - '"$DATE"'\n### Added\n\n'"$(git changelog --grep="ADDED:" $LAST_TAG..HEAD -- src/*.lua)"'\n\n### Changed\n\n'"$(git changelog --grep="CHANGED:" $LAST_TAG..HEAD -- src/*.lua)"'\n\n### Removed\n\n'"$(git changelog --grep="REMOVED:" $LAST_TAG..HEAD -- src/*.lua)"'\n\n### Fixed\n\n'"$(git changelog --grep="FIXED:" $LAST_TAG..HEAD -- src/*.lua)"'\n'
-          sed -i -e "6s/.*.*/$CHANGES/" changelog.md
-
-      - name: Create tag for release
-        env:
-          VERSION: ${{ inputs.version }}
-        run: |
-          git tag -a $VERSION -m "New release for v$VERSION"
+          chmod +x publish/create_changelog.bash
+          ./publish/create_changelog.bash $VERSION $REPOSITORY
+          CHANGES=$(cat CHANGES.md)
+          awk -v A="$CHANGES" '{ if (NR == 6) print A; else print $0}' CHANGELOG.md > newCHANGELOG.md
+          mv newCHANGELOG.md CHANGELOG.md
 
       - name: Push changes
+        env:
+          VERSION: ${{ github.event.inputs.version }}
         run: |
-          git config --global user.name 'github-actions'
-          git add changelog.md wally.toml
-          git commit -m "Bumped version to ${{ inputs.version }} and added a changelog for it"
-          git push --tags
+          git config --global user.name "github-actions"
+          git add CHANGELOG.md wally.toml
+          git commit -m "Bumped version to $VERSION and added a changelog for it"
+          git push

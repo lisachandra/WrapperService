@@ -1,0 +1,42 @@
+name: Deploy documentation
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy documentation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v1
+
+      - name: Check for changed and added documentation files
+        id: git-check
+        run: |
+          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
+          git checkout "${GITHUB_REF:11}" --
+          git add -AN
+          echo ::set-output name=changed::$(if git diff-index --quiet HEAD~1 -- docs moonwave; then echo "false"; else echo "true"; fi)
+
+      - name: Install node for installing moonwave
+        if: steps.git-check.outputs.changed == 'true'
+        uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+
+      - name: Install moonwave
+        if: steps.git-check.outputs.changed == 'true'
+        run: npm i -g moonwave@latest
+      
+      - name: Deploy documentation
+        if: steps.git-check.outputs.changed == 'true'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git 
+          git config --global user.name "github-actions"
+          moonwave build --code moonwave --publish
