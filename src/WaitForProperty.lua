@@ -16,7 +16,9 @@ local function WaitForProperty(self, propertyName, timeOut)
 		task.wait()
 		if timeOut and (os.time() - timer) >= math.floor(timeOut) or rawget(self, propertyName) ~= nil then
 			if timeOut then
-				warn("Timeout reached while calling function WaitForProperty(" .. propertyName .. ", " .. timeOut .. ")")
+				warn(
+					"Timeout reached while calling function WaitForProperty(" .. propertyName .. ", " .. timeOut .. ")"
+				)
 			end
 
 			return rawget(self, propertyName)

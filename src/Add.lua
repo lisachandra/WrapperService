@@ -18,7 +18,11 @@ local addCheck = t.tuple(
 					[valueType] = t[VALUE_TYPES[valueType]],
 				})(propertyContentsToCheck)
 			else
-				return false, string.format("(field ValueType expected, got %s) \nValid ValueTypes: Property, Method and Event", valueType)
+				return false,
+					string.format(
+						"(field ValueType expected, got %s) \nValid ValueTypes: Property, Method and Event",
+						valueType
+					)
 			end
 		end
 	end)
