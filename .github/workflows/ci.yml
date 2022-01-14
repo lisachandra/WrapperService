@@ -3,16 +3,29 @@ name: CI
 on: 
   push:
     branches:
-      - main
+      - test
   workflow_dispatch:
 
 jobs:
   ci:
-    name: Lint and Format
+    name: CI
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v1
+        with:
+          submodules: true
+
+      - name: Install LuaJIT
+        uses: leafo/gh-actions-lua@v8
+        with:
+          luaVersion: "luajit"
+
+      - name: Install luarocks
+        uses: leafo/gh-actions-luarocks@v4
+
+      - name: Install dependencies for testing
+        run: luarocks install luafilesystem
 
       - name: Install required tools
         uses: Roblox/setup-foreman@v1
@@ -21,22 +34,34 @@ jobs:
 
       - name: Lint using Selene
         run: |
-          rm -f roblox.toml
-          selene generate-roblox-std
           selene src/
+
+      - name: Test using TestEZ
+        shell: bash
+        run: |
+          chmod +x test/build.bash
+          ./test/build.bash
+          lua test/lemur.lua
 
       - name: Format code using StyLua
         run: |
           stylua src/
 
-      - name: Check for modified files in src
+      - name: Check for modified files inside src
         id: git-check
-        run: echo ::set-output name=modified::$(if git diff --quiet HEAD -- src; then echo "false"; else echo "true"; fi)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
+          git checkout "${GITHUB_REF:11}" --
+          git add -AN
+          echo ::set-output name=modified::$(if git diff-index --quiet HEAD -- src; then echo "false"; else echo "true"; fi)
 
       - name: Push changes
         if: steps.git-check.outputs.modified == 'true'
         run: |
           git config --global user.name 'github-actions'
+          git reset --soft HEAD
           git add src/
           git commit -m "Formatted code using StyLua"
           git push
