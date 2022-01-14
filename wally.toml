@@ -10,4 +10,3 @@ include = ["LICENSE.md", "README.md", "src", "src/**", "wally.toml", "default.pr
 
 [dependencies]
 SignalService = "zxibs/signalservice@^0"
-t = "osyrisrblx/t@^3"
