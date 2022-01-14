@@ -11,7 +11,7 @@ end, t.Instance)
 local function createId(self)
 	math.randomseed(#self.__wrappedInstances)
 
-    return math.random(math.huge, 1)
+	return math.random(math.huge, 1)
 end
 
 local function new(self, instanceToWrap)
@@ -31,7 +31,11 @@ local function new(self, instanceToWrap)
 	setmetatable(WrappedInstance, {
 		__index = function(_self, key)
 			if instanceToWrap[key] == nil then
-				local message = ("%q (%s) is not a valid member of %s"):format(tostring(key), typeof(key), instanceToWrap.Name)
+				local message = ("%q (%s) is not a valid member of %s"):format(
+					tostring(key),
+					typeof(key),
+					instanceToWrap.Name
+				)
 				error(message, 2)
 			end
 
@@ -46,7 +50,11 @@ local function new(self, instanceToWrap)
 
 		__newindex = function(_self, key, value)
 			if instanceToWrap[key] == nil then
-				local message = ("%q (%s) is not a valid member of %s"):format(tostring(key), typeof(key), instanceToWrap.Name)
+				local message = ("%q (%s) is not a valid member of %s"):format(
+					tostring(key),
+					typeof(key),
+					instanceToWrap.Name
+				)
 				error(message, 2)
 			end
 
