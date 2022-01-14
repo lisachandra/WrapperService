@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-awk '$0 == "[dependencies]" {i=1;next};i && i >= 0' wally.toml > test/DEPENDENCIES.toml
-
 cd test
+
+awk '$0 == "[dependencies]" {i=1;next};i && i >= 0' ../wally.toml > DEPENDENCIES.toml
 
 cat DEPENDENCIES.toml >> wally.toml
 wally install
@@ -28,7 +28,7 @@ mkdir Packages/_Index/zxibs_wrapperservice
 cd Packages/_Index/zxibs_wrapperservice
 
 for key in ${!DEPENDENCIES[@]}; do
-    DEPENDENCY_NAME=$(echo "$key" | awk -v FS=_ 'print $2')
+    DEPENDENCY_NAME=$(echo "$key" | awk -v FS=_ '{print $2}')
     DEPENDENCY_PATH_NAME=$(echo "$DEPENDENCIES_LIST" | awk -v PATTERN="$key" '$0~PATTERN')
 
     echo "return require(script.Parent.Parent['${DEPENDENCY_PATH_NAME}']['${DEPENDENCY_NAME}'])" > "${DEPENDENCIES[${key}]}.lua"
