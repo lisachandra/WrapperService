@@ -12,9 +12,7 @@ if [ ! -d "Packages" ]; then
     mkdir Packages/_Index
 fi
 
-declare -A DEPENDENCIES
-
-DEPENDENCIES+=($(awk -F '[ =@/"]' '{print "["$2"_"$3"]="$1}' DEPENDENCIES.toml))
+declare -A DEPENDENCIES=($(awk -F '[ =@/"]' '{print "["$2"_"$3"]="$1" "}' DEPENDENCIES.toml))
 DEPENDENCIES_LIST=$(ls Packages/_Index)
 
 mkdir Packages/_Index/zxibs_wrapperservice
