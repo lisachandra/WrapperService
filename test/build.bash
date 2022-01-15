@@ -31,6 +31,7 @@ for key in "${!DEPENDENCIES[@]}"; do
     DEPENDENCY_NAME=$(echo "$key" | awk -F '_' '{print $2}')
     DEPENDENCY_PATH_NAME=$(echo "$DEPENDENCIES_PATH_NAME" | awk -v PATTERN="$key" '$0~PATTERN')
 
+    echo "${key} ${DEPENDENCY_NAME} ${DEPENDENCY_PATH_NAME} ${DEPENDENCIES[${key}]}"
     echo "return require(script.Parent.Parent['${DEPENDENCY_PATH_NAME}']['${DEPENDENCY_NAME}'])" > "${DEPENDENCIES[${key}]}.lua"
 done
 
