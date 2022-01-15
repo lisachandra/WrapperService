@@ -16,14 +16,7 @@ DEPENDENCIES_LIST=$(ls Packages/_Index)
 
 declare -A DEPENDENCIES
 
-while IFS= read -r line; do
-    KEY=$(awk -v LINE="$line" -F'[@/"]' '{if (NR == LINE); print $2 "_" $3}' DEPENDENCIES.toml)
-    VALUE=$(awk -v LINE="$line" -F' ' '{if (NR == LINE); print $1}' DEPENDENCIES.toml)
-
-    echo "${VALUE}"
-
-    DEPENDENCIES+=(["$KEY"]="$VALUE")
-done < DEPENDENCIES.toml
+awk '{DEPENDENCIES+=([$(awk -v LINE='NR' -F'[@/"]' '{if (NR == LINE); print $2 "_" $3}' DEPENDENCIES.toml)]=$(print $1))}' DEPENDENCIES.toml
 
 mkdir Packages/_Index/zxibs_wrapperservice
 
