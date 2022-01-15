@@ -14,7 +14,7 @@ fi
 
 awk -v q="'" -F '[ =@/"]' 'BEGIN {ORS=" "}; END {print "["q$5"_"$6q"]="q$1q}' DEPENDENCIES.toml
 
-declare -A DEPENDENCIES=($(awk -v q="'" -F '[ =@/"]' 'BEGIN {ORS=" "}; END {print "["q$5"_"$6q"]="q$1q}' DEPENDENCIES.toml))
+declare $(awk -v q="'" -F '[ =@/"]' 'BEGIN {ORS=" "}; END {print "DEPENDENCIES["q$5"_"$6q"]="q$1q}' DEPENDENCIES.toml)
 DEPENDENCIES_PATH_NAME=$(ls Packages/_Index)
 
 mkdir Packages/_Index/zxibs_wrapperservice
