@@ -18,9 +18,9 @@ declare -A DEPENDENCIES
 
 while IFS= read -r line; do
     KEY=$(awk -v LINE="$line" -F'[@/"]' '{if (NR == LINE); print $2 "_" $3}' DEPENDENCIES.toml)
-    VALUE=$(awk -v LINE="$line" '{if (NR == LINE); print $1}' FS=" " DEPENDENCIES.toml)
+    VALUE=$(awk -v LINE="$line" -F' ' '{if (NR == LINE); print $1}' DEPENDENCIES.toml)
 
-    echo "${KEY} ${VALUE}"
+    echo "${VALUE}"
 
     DEPENDENCIES+=(["$KEY"]="$VALUE")
 done < DEPENDENCIES.toml
