@@ -12,11 +12,15 @@ if [ ! -d "Packages" ]; then
     mkdir Packages/_Index
 fi
 
-awk -v q="'" -F '[ =@/"]' '{print "["q$5"_"$6q"]="q$1q}' DEPENDENCIES.toml
-
 declare -A DEPENDENCIES
 
-awk -v q="'" -F '[ =@/"]' '{${DEPENDENCIES[q$5_$6q]=q$1q}}' DEPENDENCIES.toml
+while read line; do
+    KEY=$(awk -v LINE="$line" -F '[@/"]' '{if (NR == LINE); print $2 "_" $3}' DEPENDENCIES.toml)
+    VALUE=$(awk -v LINE="$line" '{if (NR == LINE); print $1}' DEPENDENCIES.toml)
+
+    DEPENDENCIES+=(["$KEY"]="$VALUE")
+done < DEPENDENCIES.toml
+
 DEPENDENCIES_PATH_NAME=$(ls Packages/_Index)
 
 mkdir Packages/_Index/zxibs_wrapperservice
@@ -24,7 +28,7 @@ mkdir Packages/_Index/zxibs_wrapperservice
 cd Packages/_Index/zxibs_wrapperservice
 
 for key in "${!DEPENDENCIES[@]}"; do
-    DEPENDENCY_NAME=$(echo "$key" | awk -v -F'_' '{print $2}')
+    DEPENDENCY_NAME=$(echo "$key" | awk -v -F '_' '{print $2}')
     DEPENDENCY_PATH_NAME=$(echo "$DEPENDENCIES_PATH_NAME" | awk -v PATTERN="$key" '$0~PATTERN')
 
     echo "${key} ${DEPENDENCY_NAME} ${DEPENDENCY_PATH_NAME} ${DEPENDENCIES[${key}]}"
