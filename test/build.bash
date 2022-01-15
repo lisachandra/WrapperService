@@ -14,7 +14,9 @@ fi
 
 declare -A DEPENDENCIES
 
-DEPENDENCIES+=($(awk -F '[ =@/"]' '{print "["$5"_"$6"]="$1""}' DEPENDENCIES.toml)
+echo $(awk -F '[ =@/"]' '{print "["$5"_"$6"]="$1""}' DEPENDENCIES.toml)
+
+DEPENDENCIES+=($(awk -F '[ =@/"]' '{print "["$5"_"$6"]="$1""}' DEPENDENCIES.toml))
 DEPENDENCIES_LIST=$(ls Packages/_Index)
 
 mkdir Packages/_Index/zxibs_wrapperservice
