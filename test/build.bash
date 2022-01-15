@@ -22,6 +22,7 @@ while IFS= read -r line; do
 done < DEPENDENCIES.toml
 
 DEPENDENCIES_PATH_NAME=$(ls Packages/_Index)
+echo "$DEPENDENCIES_PATH_NAME"
 
 mkdir Packages/_Index/zxibs_wrapperservice
 
