@@ -1,5 +1,6 @@
 local WrapperService = require(script.Parent)
-local t = require(script.Parent.Parent:WaitForChild("t")) or require(script.Parent.Parent.Parent.Parent:WaitForChild("t"))
+local t = require(script.Parent.Parent:WaitForChild("t"))
+	or require(script.Parent.Parent.Parent.Parent:WaitForChild("t"))
 
 local cleanupCheck = t.tuple(WrapperService.isWrapped)
 

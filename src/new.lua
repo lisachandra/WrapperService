@@ -1,4 +1,5 @@
-local t = require(script.Parent.Parent:WaitForChild("t")) or require(script.Parent.Parent.Parent.Parent:WaitForChild("t"))
+local t = require(script.Parent.Parent:WaitForChild("t"))
+	or require(script.Parent.Parent.Parent.Parent:WaitForChild("t"))
 
 local newCheck = t.tuple(function(selfToCheck)
 	if tostring(selfToCheck) == "WrapperService" and typeof(selfToCheck) == "table" then
