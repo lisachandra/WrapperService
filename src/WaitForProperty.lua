@@ -1,5 +1,5 @@
 local WrapperService = require(script.Parent)
-local t = require(script.Parent.Parent:WaitForChild("t"))
+local t = require(script.Parent.Parent:WaitForChild("t")) or require(script.Parent.Parent.Parent.Parent:WaitForChild("t"))
 
 local waitForPropertyCheck = t.tuple(WrapperService.isWrapped, t.string, t.optional(t.number))
 
