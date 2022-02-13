@@ -1,7 +1,7 @@
 return function()
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
     local WrapperService
-    
+
     local isAuto: boolean, Packages: any = pcall(function()
         return ReplicatedStorage:FindFirstChild("Packages")
     end)

@@ -95,13 +95,13 @@ return function()
             expect(Workspace.Gravity).to.be.equal(1)
         end)
 
-        it("should find the baseplate", function(context)
+        it("should correctly call a method", function(context)
             local Workspace = WrapperService.new(workspace)
             context.addWrappedInstance(Workspace)
 
-            local baseplate = Workspace:FindFirstChild("Baseplate")
+            local children = Workspace:GetChildren()
             
-            expect(typeof(baseplate)).to.be.equal("Instance")
+            expect(type(children)).to.be.equal("table")
         end)
     end)
 
