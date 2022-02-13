@@ -8,7 +8,7 @@ return function()
     end)
 
     if isAuto then
-        Signal = require(Packages._Index["zxibs_wrapperservice"]["wrapperservice"].Signal)
+        Signal = require(Packages._Index["zxibs_wrapperservice"]["wrapperservice"]:FindFirstChild("Signal"))
         WrapperService = require(Packages.WrapperService)
     else   
         Signal = require(ReplicatedStorage:FindFirstChild("WrapperService"):FindFirstChild("Signal"))

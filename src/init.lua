@@ -2,9 +2,11 @@ local Signal = require(script.Signal)
 
 type Properties<I> = {
     [any]: {
-        Property: any?,
-        Method: (self: WrappedInstance<I>, ...any?) -> ...any?,
-        Event: (Signal: Signal<...any>) -> ()?,
+        Property: any
+    } | {
+        Method: (self: WrappedInstance<I>, ...any?) -> ...any?
+    } | {
+        Event: (Signal: Signal<any>) -> ()
     }
 }
 
@@ -15,7 +17,7 @@ export type WrappedInstance<I> = {
     Instance: I,
     Index: number,
 
-    Add: (self: WrappedInstance<I>, Properties: Properties<I>) -> (),
+    Add: (self: WrappedInstance<I>, properties: Properties<I>) -> (),
     Clean: (self: WrappedInstance<I>) -> I,
     WaitForProperty: (self: WrappedInstance<I>, propertyKey: any, timeOut: number) -> any
 }
@@ -27,16 +29,16 @@ export type WrappedInstance<I> = {
 local WrapperService = {}
 WrapperService.Instances = {}
 
-function WrapperService.new(Instance: Instance)
+function WrapperService.new<I>(Instance: I): WrappedInstance<I>
     local self = {}
     table.insert(WrapperService.Instances, self)
 
-    self.Instance = Instance
-    self.Index = table.find(WrapperService.Instances, self)
+    self.Instance = Instance :: Instance
+    self.Index = table.find(WrapperService.Instances, self) :: number
 
 	setmetatable(self, WrapperService)
 
-    return self
+    return self :: any
 end
 
 function WrapperService:Is(object: any): (boolean, string?)
@@ -46,11 +48,11 @@ function WrapperService:Is(object: any): (boolean, string?)
     ) or false, ("expected WrappedInstance got %s"):format(typeof(object))
 end
 
-function WrapperService:GetByIndex(Index: number)
+function WrapperService:GetByIndex(Index: number): WrappedInstance<Instance>
     return self.Instances[Index]
 end
 
-function WrapperService:Add(properties): ()
+function WrapperService:Add(properties: Properties<Instance>): ()
     for name, propertyContents in pairs(properties) do
 		for valueType, value in pairs(propertyContents) do
 			local GetValues = {
