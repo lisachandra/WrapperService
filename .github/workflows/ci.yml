@@ -31,7 +31,7 @@ jobs:
           Expand-Archive -LiteralPath roblox-win-installer.zip -DestinationPath .;
           cd roblox-win-installer-0.5;
           pip install --requirement requirements.txt;
-          python install.py "${{ secrets.ROBLOSECURITY }}"
+          python install.py "${{ secrets.ROBLOXSECURITY }}"
 
       - name: Create flag overrides for successful login
         run: |
