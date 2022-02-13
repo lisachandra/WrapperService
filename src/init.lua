@@ -20,7 +20,7 @@ export type WrappedInstance<I> = {
     Add: (self: WrappedInstance<I>, properties: Properties<I>) -> (),
     Clean: (self: WrappedInstance<I>) -> I,
     WaitForProperty: (self: WrappedInstance<I>, propertyKey: any, timeOut: number) -> any
-}
+} & I
 
 --[[
      A service that allows you to create custom properties for roblox instances  
