@@ -27,7 +27,7 @@ export type WrappedInstance<I> = {
      Github: [https://github.com/zxibs/WrapperServiceService](https://github.com/zxibs/WrapperServiceService)
 ]]
 local WrapperService = {}
-WrapperService.Instances = {}
+WrapperService.Instances = {} :: { WrappedInstance<Instance> }
 
 function WrapperService.new<I>(Instance: I): WrappedInstance<I>
     local self = {}
@@ -49,7 +49,7 @@ function WrapperService:Is(object: any): (boolean, string?)
 end
 
 function WrapperService:GetByIndex(Index: number): WrappedInstance<Instance>
-    return self.Instances[Index]
+    return self.Instances[Index] :: any
 end
 
 function WrapperService:Add(properties: Properties<Instance>): ()
@@ -109,7 +109,7 @@ function WrapperService:Clean(): Instance
     local Instance = self.Instance
     
     for Index = (self.Index :: number + 1), #WrapperService.Instances do
-        local WrappedInstance: WrappedInstance<any> = WrapperService.Instances[Index]
+        local WrappedInstance = WrapperService.Instances[Index]
 
         WrappedInstance.Index -= 1
     end
