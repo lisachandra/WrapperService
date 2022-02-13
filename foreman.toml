@@ -1,4 +1,6 @@
 [tools]
-stylua = { source = "JohnnyMorganz/stylua", version = "0.11.3" }
-wally = { source = "UpliftGames/wally", version = "0.3.1" }
-selene = { source = "Kampfkarren/selene", version = "x" }
+run-in-roblox = { source = "rojo-rbx/run-in-roblox", version = "x" }
+stylua = { source = "JohnnyMorganz/stylua", version = "x" }
+selene = { source = "kampfkarren/selene", version = "x" }
+wally = { source = "UpliftGames/wally", version = "x" }
+rojo = { source = "rojo-rbx/rojo", version = "x" }

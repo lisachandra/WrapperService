@@ -1,0 +1,34 @@
+{
+    "name": "wrapperservice-test",
+    "tree": {
+        "$className": "DataModel",
+
+        "ReplicatedStorage": {
+            "$className": "ReplicatedStorage",
+
+            "DevPackages": {
+                "$ignoreUnknownInstances": true,
+                "$path": "DevPackages"
+            },
+            
+            "Packages": {
+                "$ignoreUnknownInstances": true,
+                "$path": "Packages"
+            },
+
+            "Tests": {
+                "$ignoreUnknownInstances": true,
+                "$path": "Tests"
+            }
+        },
+
+        "ServerScriptService": {
+            "$className": "ServerScriptService",
+
+            "runner": {
+                "$ignoreUnknownInstances": true,
+                "$path": "runner.server.lua"
+            }
+        }
+    }
+}

@@ -7,25 +7,55 @@ on:
   workflow_dispatch:
 
 jobs:
-  ci:
-    name: CI
+  tests:
+    name: Tests
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v1
+
+      - name: Install required tools
+        uses: Roblox/setup-foreman@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build place file
+        shell: bash
+        run: |
+          chmod +x test/build.bash
+          ./test/build.bash
+          
+      - name: Install Roblox Studio
+        run: |
+          Invoke-WebRequest -Uri "https://github.com/OrbitalOwen/roblox-win-installer/archive/0.5.zip" -OutFile roblox-win-installer.zip;
+          Expand-Archive -LiteralPath roblox-win-installer.zip -DestinationPath .;
+          cd roblox-win-installer-0.5;
+          pip install --requirement requirements.txt;
+          python install.py "${{ secrets.ROBLOSECURITY }}"
+
+      - name: Create flag overrides for successful login
+        run: |
+          $flags = @{DFIntStudioUseNewLoginDataEndpointHundredthPercent=0; FFlagStudioUseNewLoginDataEndpoint=$false}
+          New-Item -Path 'C:/Program Files (x86)/Roblox/Versions/version-*/' -Name "ClientSettings" -ItemType "directory"
+          New-Item -Path 'C:/Program Files (x86)/Roblox/Versions/version-*/ClientSettings' -Name "ClientAppSettings.json"
+          $flags | ConvertTo-Json -depth 32| set-content -Path 'C:/Program Files (x86)/Roblox/Versions/version-*/ClientSettings/ClientAppSettings.json'
+
+      - name: Add RBXID to the Windows registry
+        run: REG ADD HKCU\Software\RobloxStudioBrowser\roblox.com /t REG_SZ /v .RBXID /d "${{ secrets.RBXID }}"
+
+      - name: Run tests
+        shell: bash
+        run: |
+          chmod +x test/run.bash
+          ./test/run.bash
+
+  code-quality:
+    needs: tests
+    name: Code quality
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v1
-        with:
-          submodules: true
-
-      - name: Install LuaJIT
-        uses: leafo/gh-actions-lua@v8
-        with:
-          luaVersion: "luajit"
-
-      - name: Install luarocks
-        uses: leafo/gh-actions-luarocks@v4
-
-      - name: Install dependencies for testing
-        run: luarocks install luafilesystem
 
       - name: Install required tools
         uses: Roblox/setup-foreman@v1
@@ -35,13 +65,6 @@ jobs:
       - name: Lint using Selene
         run: |
           selene src/
-
-      - name: Test using TestEZ
-        shell: bash
-        run: |
-          chmod +x test/build.bash
-          ./test/build.bash
-          lua test/lemur.lua
 
       - name: Format code using StyLua
         run: |

@@ -1,6 +1,16 @@
 return function()
-    local Packages = script.Parent.Parent:WaitForChild("Packages")
-    local WrapperService = require(Packages:WaitForChild("WrapperService"))
+    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+    local WrapperService
+    
+    local isAuto: boolean, Packages: any = pcall(function()
+        return ReplicatedStorage:FindFirstChild("Packages")
+    end)
+
+    if isAuto then 
+        WrapperService = require(Packages.WrapperService)
+    else
+        WrapperService = require(ReplicatedStorage:FindFirstChild("WrapperService"))
+    end
 
     beforeAll(function(context)
         context.wrappedInstances = {}
@@ -21,8 +31,8 @@ return function()
         end
 
         for _, wrappedInstance in ipairs(context.wrappedInstances) do
-            if WrapperService.isWrapped(wrappedInstance) then
-                wrappedInstance:Cleanup()
+            if WrapperService.Is(wrappedInstance) then
+                wrappedInstance:Clean()
             end
         end
     end)
