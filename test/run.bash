@@ -8,7 +8,7 @@ while true; do
     if grep -q 'test nodes reported failures.' 'output.txt'; then 
         EXIT_CODE=1
         break
-    elif ! grep -q '[ERROR run_in_roblox] receiving on a closed channel' 'output.txt' then
+    elif ! grep -q '[ERROR run_in_roblox] receiving on a closed channel' 'output.txt'; then
         break
     fi
 done
