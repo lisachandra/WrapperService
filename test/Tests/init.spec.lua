@@ -2,11 +2,11 @@ return function()
     local ReplicatedStorage = game:GetService("ReplicatedStorage")
     local WrapperService
 
-    local isAuto: boolean, Packages: any = pcall(function()
+    local _success, Packages: any = pcall(function()
         return ReplicatedStorage:FindFirstChild("Packages")
     end)
 
-    if isAuto then 
+    if Packages then 
         WrapperService = require(Packages.WrapperService)
     else
         WrapperService = require(ReplicatedStorage:FindFirstChild("WrapperService"))

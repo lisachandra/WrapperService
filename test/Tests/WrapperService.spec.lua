@@ -3,11 +3,11 @@ return function()
     local WrapperService
     local Signal
     
-    local isAuto: boolean, Packages: any = pcall(function()
+    local _success, Packages: any = pcall(function()
         return ReplicatedStorage:FindFirstChild("Packages")
     end)
 
-    if isAuto then
+    if Packages then
         Signal = require(Packages._Index["zxibs_wrapperservice"]["wrapperservice"]:FindFirstChild("Signal"))
         WrapperService = require(Packages.WrapperService)
     else   
@@ -111,6 +111,17 @@ return function()
             context.addWrappedInstance(Workspace)
 
             Workspace = WrapperService:GetByIndex(Workspace.Index)
+
+            expect(WrapperService:Is(Workspace)).to.be.equal(true)
+        end)
+    end)
+
+    describe("GetByInstance", function()
+        it("should return a WrappedInstance", function(context)
+            local Workspace = WrapperService.new(workspace)
+            context.addWrappedInstance(Workspace)
+
+            Workspace = WrapperService:GetByInstance(workspace)
 
             expect(WrapperService:Is(Workspace)).to.be.equal(true)
         end)

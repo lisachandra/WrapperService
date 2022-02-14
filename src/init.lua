@@ -48,8 +48,16 @@ function WrapperService:Is(object: any): (boolean, string?)
     ) or false, ("expected WrappedInstance got %s"):format(typeof(object))
 end
 
-function WrapperService:GetByIndex(Index: number): WrappedInstance<Instance>
+function WrapperService:GetByIndex(Index: number): WrappedInstance<Instance>?
     return self.Instances[Index] :: any
+end
+
+function WrapperService:GetByInstance<I>(Instance: I): WrappedInstance<I>?
+    for _index, WrappedInstance in ipairs(self.Instances) do
+        if WrappedInstance.Instance == Instance then
+            return WrappedInstance :: any
+        end
+    end
 end
 
 function WrapperService:Add(properties: Properties<Instance>): ()
