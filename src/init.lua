@@ -1,23 +1,22 @@
 local Signal = require(script.Signal)
 
-type Properties<I> = {
+type Properties<I, T...> = {
     [any]: {
         Property: any
     } | {
         Method: (self: WrappedInstance<I>, ...any?) -> ...any?
     } | {
-        Event: (Signal: Signal<any>) -> ()
+        Event: (Signal: Signal<T...>) -> ()
     }
 }
 
--- selene: allow(parse_error)
 export type Signal<T...> = Signal.Signal<T...>
 
 export type WrappedInstance<I> = {
     Instance: I,
     Index: number,
 
-    Add: (self: WrappedInstance<I>, properties: Properties<I>) -> (),
+    Add: (self: WrappedInstance<I>, properties: Properties<any>) -> (),
     Clean: (self: WrappedInstance<I>) -> I,
     WaitForProperty: (self: WrappedInstance<I>, propertyKey: any, timeOut: number) -> any
 } & I
@@ -60,7 +59,7 @@ function WrapperService:GetByInstance<I>(Instance: I): WrappedInstance<I>?
     end
 end
 
-function WrapperService:Add(properties: Properties<Instance>): ()
+function WrapperService:Add(properties: Properties<Instance, any>): ()
     for name, propertyContents in pairs(properties) do
 		for valueType, value in pairs(propertyContents) do
 			local GetValues = {
@@ -166,7 +165,7 @@ function WrapperService:__newindex(key: any, value: any): ()
     end
 end
 
-function WrapperService:__tostring(): ()
+function WrapperService:__tostring(): string
     return ("WrappedInstance (%s)"):format(self.Instance.Name)
 end
 
