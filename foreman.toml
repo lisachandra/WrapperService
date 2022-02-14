@@ -1,6 +1,6 @@
 [tools]
-run-in-roblox = { source = "rojo-rbx/run-in-roblox", version = "0.3.0" }
-stylua = { source = "JohnnyMorganz/stylua", version = "0.12.2" }
-selene = { source = "kampfkarren/selene", version = "0.16.0" }
-wally = { source = "UpliftGames/wally", version = "0.3.1" }
-rojo = { source = "rojo-rbx/rojo", version = "6" }
+run-in-roblox = { source = "rojo-rbx/run-in-roblox", version = "x" }
+stylua = { source = "JohnnyMorganz/stylua", version = "x" }
+selene = { source = "kampfkarren/selene", version = "x" }
+wally = { source = "UpliftGames/wally", version = "x" }
+rojo = { source = "rojo-rbx/rojo", version = "x" }
