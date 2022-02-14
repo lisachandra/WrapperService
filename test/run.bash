@@ -12,7 +12,7 @@ while true; do
         break
     fi
 
-    sleep 1
+    cat output.txt
 done
 
 cat output.txt
