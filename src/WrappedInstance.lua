@@ -143,3 +143,5 @@ end
 function WrappedInstance:__tostring(): string
     return ("WrappedInstance (%s)"):format(self.Instance.Name)
 end
+
+return WrappedInstance
