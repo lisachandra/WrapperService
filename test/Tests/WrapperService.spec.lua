@@ -175,7 +175,7 @@ return function()
                 }
             })
 
-            task.delay(0.2, Workspace.Add, Workspace, {
+            task.delay(0.1, Workspace.Add, Workspace, {
                 NewProperty = {
                     Property = "This is a new property!"
                 },
@@ -195,7 +195,7 @@ return function()
 
                 GetNewProperty = {
                     Method = function(self)
-                        return self:WaitForProperty("InvalidNewProperty", 2)
+                        return self:WaitForProperty("InvalidNewProperty", 0.1)
                     end
                 }
             })
@@ -216,7 +216,7 @@ return function()
                 }
             })
 
-            task.delay(0.5, Workspace.Add, Workspace, {
+            task.delay(0.1, Workspace.Add, Workspace, {
                 NewProperty = {
                     Property = "This is a new property!"
                 },

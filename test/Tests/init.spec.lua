@@ -31,7 +31,7 @@ return function()
         end
 
         for _, wrappedInstance in ipairs(context.wrappedInstances) do
-            if WrapperService.Is(wrappedInstance) then
+            if WrapperService:Is(wrappedInstance) then
                 wrappedInstance:Clean()
             end
         end
