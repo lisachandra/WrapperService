@@ -24,7 +24,7 @@ export type WrappedInstance<I> = {
 
 --[[
      A service that allows you to create custom properties for roblox instances  
-     Github: [https://github.com/zxibs/WrapperServiceService](https://github.com/zxibs/WrapperServiceService)
+     Github: [https://github.com/zxibs/WrapperService](https://github.com/zxibs/WrapperService)
 ]]
 local WrapperService = {}
 WrapperService.Instances = {} :: { WrappedInstance<Instance> }
