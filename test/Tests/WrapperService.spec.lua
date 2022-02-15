@@ -8,10 +8,10 @@ return function()
     end)
 
     if Packages then
-        Signal = require(Packages._Index["zxibs_wrapperservice"]["wrapperservice"]:FindFirstChild("Signal"))
+        Signal = require(Packages._Index["zxibs_wrapperservice"]["wrapperservice"]:FindFirstChild("Utilities"):FindFirstChild("Signal"))
         WrapperService = require(Packages.WrapperService)
     else   
-        Signal = require(ReplicatedStorage:FindFirstChild("WrapperService"):FindFirstChild("Signal"))
+        Signal = require(ReplicatedStorage:FindFirstChild("WrapperService"):FindFirstChild("Utilities"):FindFirstChild("Signal"))
         WrapperService = require(ReplicatedStorage:FindFirstChild("WrapperService"))
     end
 
