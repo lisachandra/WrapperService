@@ -1,4 +1,4 @@
-local t = require(script.Parent.t)
+local t = require(script.Parent.Utilities.t)
 
 local EXPECTED = "%s expected, got %s"
 
@@ -42,7 +42,6 @@ local function GetChecks(ClassOrService, IsService)
 
 		local Checks = {
 			Clean = t.tuple(IsWrappedInstance),
-			WaitForProperty = t.tuple(IsWrappedInstance, t.any, t.optional(t.number)),
 			Add = t.tuple(
 				IsWrappedInstance,
 				t.map(

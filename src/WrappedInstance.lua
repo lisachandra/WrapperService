@@ -1,6 +1,4 @@
-local RunService = game:GetService("RunService")
-
-local Signal = require(script.Parent.Signal)
+local Signal = require(script.Parent.Utilities.Signal)
 local GetChecks = require(script.Parent.GetChecks)
 
 type Properties<I> = {
@@ -17,14 +15,12 @@ type Properties<I> = {
 export type Signal = Signal.Signal
 
 export type WrappedInstance<I> = {
-	Cleaning: Signal,
-	Instance: I,
-	Index: number,
+    Changed: Signal,
+    Called: Signal,
 
 	Add: (self: WrappedInstance<I>, properties: Properties<I>) -> (),
-	Clean: (self: WrappedInstance<I>) -> I,
-	WaitForProperty: (self: WrappedInstance<I>, propertyKey: any, timeOut: number?) -> any?,
-} & I
+	Clean: (self: WrappedInstance<I>) -> I
+} & { [any]: any } & I
 
 --[=[
     @class WrappedInstance
@@ -37,27 +33,6 @@ local Checks = GetChecks(WrappedInstance)
     @within WrappedInstance
 
     Properties type for ```WrappedInstance:Add``` method
-]=]
-
---[=[
-    @prop Cleaning Signal<number>
-    @within WrappedInstance
-
-    A signal that will get fired while cleaning
-]=]
-
---[=[
-    @prop Index number
-    @within WrappedInstance
-
-    The index of where the wrapped instance is stored in ```WrapperService.Instances```
-]=]
-
---[=[
-    @prop Instance I
-    @within WrappedInstance
-
-    The instance that was passed in ```WrapperService:Create```
 ]=]
 
 --[=[
@@ -77,7 +52,7 @@ function WrappedInstance:Add(properties: Properties<Instance>): ()
 				end,
 
 				Event = function()
-					local newSignal: Signal = Signal.new() :: any
+					local newSignal: Signal = self._Janitor:Add(Signal.new(), "DisconnectAll")
 					task.spawn(value, newSignal)
 
 					return newSignal
@@ -104,39 +79,6 @@ end
 
 --[=[
     @since v1.0.0
-    @param propertyKey any
-    @param timeOut number?
-    @return any
-    @yields
-    
-    Similar to ```Instance:WaitForChild``` but for properties.
-]=]
-function WrappedInstance:WaitForProperty(propertyKey: any, timeOut: number?): any?
-	assert(Checks.WaitForProperty(self, propertyKey, timeOut))
-
-	local timer = os.clock()
-	local waitMethod = if RunService:IsClient() then "RenderStepped" else "Heartbeat"
-
-	while true do
-		if timeOut and (os.clock() - timer) >= timeOut or self[propertyKey] then
-			if timeOut and (os.clock() - timer) >= timeOut then
-				warn(
-					("Timeout reached while calling function WaitForProperty(%s, %s)"):format(
-						tostring(propertyKey),
-						tostring(timeOut)
-					)
-				)
-			end
-
-			return self[propertyKey]
-		end
-
-		RunService[waitMethod]:Wait()
-	end
-end
-
---[=[
-    @since v1.0.0
     @return I
     
     Makes the wrapped instance unuseable.
@@ -144,9 +86,9 @@ end
 function WrappedInstance:Clean(): Instance
 	assert(Checks.Clean(self))
 
-	local Instance = self.Instance
+	local Instance = self._Instance
 
-	self.Cleaning:Fire(self.Index)
+	self._Janitor:Destroy()
 
 	table.clear(self)
 	setmetatable(self, nil)
@@ -155,25 +97,41 @@ function WrappedInstance:Clean(): Instance
 end
 
 function WrappedInstance:__index(key: any): any?
-	if type(WrappedInstance[key]) == "function" then
-		return function(otherSelf, ...)
-			return WrappedInstance[key](otherSelf, ...)
+    local Called = self._Public.Called
+    local property = self._Public[key]
+
+    if type(property) == "function" then
+        return function(otherSelf, ...)
+            Called:Fire(key, otherSelf, ...)
+			return property(otherSelf, ...)
 		end
-	elseif WrappedInstance[key] then
-		return WrappedInstance[key]
+    elseif property then
+        return property
+    end
+
+    property = WrappedInstance[key]
+
+	if type(property) == "function" then
+		return function(otherSelf, ...)
+            Called:Fire(key, otherSelf, ...)
+			return property(otherSelf, ...)
+		end
+	elseif property then
+		return property
 	end
 
-	local exists: boolean, property: any = pcall(function()
-		return self.Instance[key]
+	local exists: boolean, instanceProperty: any = pcall(function()
+		return self._Instance[key]
 	end)
 
 	if exists then
-		if type(property) == "function" then
+		if type(instanceProperty) == "function" then
 			return function(_, ...)
-				return property(self.Instance, ...)
+                Called:Fire(key, self._Instance, ...)
+				return instanceProperty(self._Instance, ...)
 			end
 		else
-			return property
+			return instanceProperty
 		end
 	end
 
@@ -181,17 +139,26 @@ function WrappedInstance:__index(key: any): any?
 end
 
 function WrappedInstance:__newindex(key: any, value: any): ()
-	local exists: boolean = pcall(function()
-		local _test = self.Instance[key]
+    local Changed = self._Public.Changed
+    local property = self._Public[key]
+
+    if property then
+        self._Public[key] = value
+        Changed:Fire(property, value)
+    end
+
+	local exists: boolean, instanceProperty: string | any = pcall(function()
+		return self._Instance[key]
 	end)
 
 	if exists then
-		self.Instance[key] = value
+		self._Instance[key] = value
+        Changed:Fire(instanceProperty, value)
 	end
 end
 
 function WrappedInstance:__tostring(): string
-	return ("WrappedInstance (%s)"):format(self.Instance.Name)
+	return ("WrappedInstance (%s)"):format(self._Instance.Name)
 end
 
 return WrappedInstance

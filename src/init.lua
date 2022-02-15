@@ -1,4 +1,5 @@
-local Signal = require(script.Signal)
+local Signal = require(script.Utilities.Signal)
+local Janitor = require(script.Utilities.Janitor)
 local GetChecks = require(script.GetChecks)
 local WrappedInstance = require(script.WrappedInstance)
 
@@ -33,19 +34,24 @@ local Checks = GetChecks(WrapperService, true)
 function WrapperService:Create<I>(Instance: I): WrappedInstance<I>
 	assert(Checks.Create(self, Instance))
 
-	local Wrapped = {}
+	local Wrapped = { _Public = {} }
 
-	Wrapped.Instance = Instance :: Instance
-	Wrapped.Index = (#self.Instances + 1) :: number
-	Wrapped.Cleaning = Signal.new() :: Signal
+    Wrapped._Janitor = Janitor.new()
+	Wrapped._Instance = Instance
+	Wrapped._Index = #self.Instances + 1
 
-	Wrapped.Cleaning:Connect(function(Index: number)
-		for InstanceIndex = (Index + 1), #self.Instances do
-			self.Instances[InstanceIndex].Index -= 1
-		end
+    Wrapped._Public.Changed = Wrapped._Janitor:Add(Signal.new(), "DisconnectAll") :: Signal
+    Wrapped._Public.Called = Wrapped._Janitor:Add(Signal.new(), "DisconnectAll") :: Signal
 
-		table.remove(self.Instances, Index)
-	end)
+	Wrapped._Public.Called:Connect(function(methodKey)
+        if tostring(methodKey) == "Clean" then
+            for InstanceIndex = (self._Index + 1), #self.Instances do
+                self.Instances[InstanceIndex]._Index -= 1
+            end
+    
+            table.remove(self.Instances, self._Index)
+        end
+    end)
 
 	setmetatable(Wrapped, WrappedInstance)
 	table.insert(self.Instances, Wrapped)
@@ -92,7 +98,7 @@ function WrapperService:GetByInstance<I>(Instance: I): WrappedInstance<I>?
 	assert(Checks.GetByInstance(self, Instance))
 
 	for _index, wrappedInstance in ipairs(self.Instances) do
-		if wrappedInstance.Instance == Instance then
+		if wrappedInstance._Instance == Instance then
 			return wrappedInstance :: any
 		end
 	end

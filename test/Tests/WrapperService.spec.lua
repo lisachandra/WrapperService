@@ -33,11 +33,11 @@ return function()
     describe("Clean", function()
         it("should destroy the WrappedInstance and return the instance that was passed in :Create", function()
             local Workspace = WrapperService:Create(workspace)
-            local Index = Workspace.Index
+            local Index = Workspace._Index
 
             Workspace = Workspace:Clean()
 
-            expect(Workspace.Name).to.be.equal("Workspace")
+            expect(Workspace).to.be.equal(workspace)
             expect(WrapperService:Is(Workspace)).to.be.equal(false)
             expect(WrapperService.Instances[Index]).to.be.equal(nil)
         end)
@@ -46,12 +46,24 @@ return function()
             local Workspace = WrapperService:Create(workspace)
             local otherWorkspace = WrapperService:Create(workspace)
 
-            local lastIndex = otherWorkspace.Index
+            local lastIndex = otherWorkspace._Index
 
             Workspace = Workspace:Clean()
             
             expect(type(table.find(WrapperService.Instances, otherWorkspace))).to.be.equal("number")
-            expect(otherWorkspace.Index == (lastIndex - 1)).to.be.equal(true)
+            expect(otherWorkspace._Index == (lastIndex - 1)).to.be.equal(true)
+        end)
+
+        it("should destroy the WrappedInstance and disconnect all signals", function()
+            local Workspace = WrapperService:Create(workspace)
+
+            local Connection = Workspace.Called:Connect(function() end)
+            local Connection1 = Workspace.Changed:Connect(function() end)
+
+            Workspace:Clean()
+
+            expect(Connection.Connected).to.be.equal(false)
+            expect(Connection1.Connected).to.be.equal(false)
         end)
     end)
     
@@ -87,7 +99,7 @@ return function()
 
             context.addWrappedInstance(Workspace)
             context.addRevertableChanges("Gravity", {
-                instance = Workspace.Instance,
+                instance = Workspace._Instance,
                 previousValue = Workspace.Gravity
             })
 
@@ -110,7 +122,7 @@ return function()
             local Workspace = WrapperService:Create(workspace)
             context.addWrappedInstance(Workspace)
 
-            Workspace = WrapperService:GetByIndex(Workspace.Index)
+            Workspace = WrapperService:GetByIndex(Workspace._Index)
 
             expect(WrapperService:Is(Workspace)).to.be.equal(true)
         end)
@@ -138,14 +150,14 @@ return function()
                 },
 
                 GetInteger = {
-                    Method = function()
-                        return 1
+                    Method = function(self)
+                        return self.Index
                     end
                 }
             })
 
             expect(Workspace.NewProperty).to.be.equal("This is a new property!")
-            expect(Workspace:GetInteger()).to.be.a("number")
+            expect(type(Workspace:GetInteger())).to.be.equal("number")
         end)
 
         it("should make a new signal", function(context)
@@ -162,67 +174,112 @@ return function()
         end)
     end)
 
-    describe("WaitForProperty", function()
-        it("should wait for a property", function(context)
+    describe("Called", function()
+        it("should fire with arguments when calling a prototype method", function()
             local Workspace = WrapperService:Create(workspace)
-            context.addWrappedInstance(Workspace)
+            local methodString
 
-            Workspace:Add({
-                GetNewProperty = {
-                    Method = function(self)
-                        return self:WaitForProperty("NewProperty")
-                    end
-                }
-            })
+            Workspace.Called:Connect(function(methodKey, self)
+                methodString = tostring(methodKey)
+                Workspace = self
+            end)
 
-            task.delay(0.1, Workspace.Add, Workspace, {
-                NewProperty = {
-                    Property = "This is a new property!"
-                },
-            })
+            Workspace:Clean()
 
-            expect(type(Workspace:GetNewProperty())).to.be.equal("string")
+            expect(methodString).to.be.equal("Clean")
+            expect(Workspace).to.be.equal(nil)
         end)
 
-        it("should timeout while waiting for a property", function(context)
+        it("should fire with arguments when calling an instance method", function(context)
             local Workspace = WrapperService:Create(workspace)
+            local methodString
             context.addWrappedInstance(Workspace)
 
-            Workspace:Add({
-                NewProperty = {
-                    Property = "This is a new property!"
-                },
+            Workspace.Called:Connect(function(methodKey, self)
+                methodString = tostring(methodKey)
+                Workspace = self
+            end)
 
-                GetNewProperty = {
-                    Method = function(self)
-                        return self:WaitForProperty("InvalidNewProperty", 0.1)
-                    end
-                }
-            })
+            Workspace:GetChildren()
 
-            expect(type(Workspace.NewProperty)).to.be.equal("string")
-            expect(Workspace:GetNewProperty()).to.be.equal(nil)
+            expect(methodString).to.be.equal("GetChildren")
+            expect(Workspace).to.be.equal(workspace)
         end)
 
-        it("should wait for a property with a timeout", function(context)
+        it("should fire with arguments when calling a custom method", function(context)
             local Workspace = WrapperService:Create(workspace)
+            local methodString
             context.addWrappedInstance(Workspace)
 
             Workspace:Add({
-                GetNewProperty = {
+                GetInteger = {
                     Method = function(self)
-                        return self:WaitForProperty("NewProperty", 1)
+                        return self.Index
                     end
                 }
             })
 
-            task.delay(0.1, Workspace.Add, Workspace, {
+            Workspace.Called:Connect(function(methodKey, self)
+                methodString = tostring(methodKey)
+                Workspace = self
+            end)
+
+            Workspace:GetInteger()
+
+            expect(methodString).to.be.equal("GetInteger")
+            expect(WrapperService:Is(Workspace)).to.be.equal(true)
+        end)
+    end)
+
+    describe("Changed", function()
+        it("should fire with arguments when a public property has changed", function(context)
+            local Workspace = WrapperService:Create(workspace)
+            local propertyName, lastValue, newValue
+            context.addWrappedInstance(Workspace)
+
+            Workspace.Changed:Connect(function(propertyKey, last, new)
+                propertyName = tostring(propertyKey)
+                lastValue = last
+                newValue = new
+            end)
+
+            Workspace:Add({
                 NewProperty = {
                     Property = "This is a new property!"
                 },
             })
 
-            expect(type(Workspace:GetNewProperty())).to.be.equal("string")
+            Workspace.NewProperty = "This property was changed!"
+
+            expect(lastValue).to.be.equal("This is a new property!")
+            expect(newValue).to.be.equal("This property was changed!")
+            expect(propertyName).to.be.equal("NewProperty")
+        end)
+
+        it("should fire with arguments when a instance property has changed", function(context)
+            local Workspace = WrapperService:Create(workspace)
+            local propertyName, lastValue, newValue
+            local previousValue
+            context.addWrappedInstance(Workspace)
+
+            previousValue = Workspace.FallenPartsDestroyHeight
+
+            context.addRevertableChanges({
+                Instance = Workspace._Instance,
+                previousValue = previousValue
+            })
+
+            Workspace.Changed:Connect(function(propertyKey, last, new)
+                propertyName = tostring(propertyKey)
+                lastValue = last
+                newValue = new
+            end)
+
+            Workspace.FallenPartsDestroyHeight = -50
+
+            expect(lastValue).to.be.equal(previousValue)
+            expect(newValue).to.be.equal(-50)
+            expect(propertyName).to.be.equal("FallenPartsDestroyHeight")
         end)
     end)
 end
