@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - ```WrappedInstance:Cleanup``` Renamed to ```WrappedInstance:Clean```
-- ```WrapperService:new``` Renamed to ```WrapperService:Create``
+- ```WrapperService:new``` Renamed to ```WrapperService:Create```
 - ```WrapperService:GetWrappedInstance``` Renamed to ```WrapperService:GetByInstance```
 - All non metatable functions now use `:` instead of `.`
 - [Signal](src/Signal.lua) module now uses luau typed GoodSignal instead of SignalService
