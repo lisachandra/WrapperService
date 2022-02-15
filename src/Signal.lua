@@ -1,4 +1,4 @@
---------------------------------------------------------------------------------
+--[[--------------------------------[=]-------------------------------------]]--
 --               Batched Yield-Safe Signal Implementation                     --
 -- This is a Signal class which has effectively identical behavior to a       --
 -- normal RBXScriptSignal, with the only difference being a couple extra      --
@@ -22,7 +22,7 @@
 -- Authors:                                                                   --
 --   stravant - July 31st, 2021 - Created the file.                           --
 --   lisachandra - February 12th, 2022 - Added .Is and luau types             --
---------------------------------------------------------------------------------
+--[[--------------------------------[=]-------------------------------------]]--
 
 export type Connection = {
 	Connected: boolean,
@@ -30,11 +30,11 @@ export type Connection = {
 	Disconnect: (self: Connection) -> ()
 }
 
-export type Signal<T...> = {
-	DisconnectAll: (self: Signal<T...>) -> (),
-	Connect: (self: Signal<T...>, Callback: (T...) -> ()) -> Connection,
-	Fire: (self: Signal<T...>, T...) -> (),
-	Wait: (self: Signal<T...>) -> T...
+export type Signal = {
+	DisconnectAll: (self: Signal) -> (),
+	Connect: (self: Signal, Callback: (...any?) -> ()) -> Connection,
+	Fire: (self: Signal, ...any?) -> (),
+	Wait: (self: Signal) -> ...any?
 }
 
 -- The currently idle thread to run the next handler on

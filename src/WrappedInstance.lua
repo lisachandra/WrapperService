@@ -3,32 +3,70 @@ local RunService = game:GetService("RunService")
 local Signal = require(script.Parent.Signal)
 local GetChecks = require(script.Parent.GetChecks)
 
-type Properties<I, T...> = {
+type Properties<I> = {
     [any]: {
         Property: any
     } | {
         Method: (self: WrappedInstance<I>, ...any?) -> ...any?
     } | {
-        Event: (Signal: Signal<T...>) -> ()
+        Event: (Signal: Signal) -> ()
     }
 }
 
-export type Signal<T...> = Signal.Signal<T...>
+--TODO: Add T... generics when parse_error problem is fixed
+export type Signal = Signal.Signal
 
 export type WrappedInstance<I> = {
-    Cleaning: Signal<number>,
+    Cleaning: Signal,
     Instance: I,
     Index: number,
 
-    Add: (self: WrappedInstance<I>, properties: Properties<I, any>) -> (),
+    Add: (self: WrappedInstance<I>, properties: Properties<I>) -> (),
     Clean: (self: WrappedInstance<I>) -> I,
-    WaitForProperty: (self: WrappedInstance<I>, propertyKey: any, timeOut: number) -> any?
+    WaitForProperty: (self: WrappedInstance<I>, propertyKey: any, timeOut: number?) -> any?
 } & I
 
+--[=[
+    @class WrappedInstance
+]=]
 local WrappedInstance = {}
 local Checks = GetChecks(WrappedInstance)
 
-function WrappedInstance:Add(properties: Properties<Instance, any>): ()
+--[=[
+    @type Properties<I> { [any]: {Property: any } | { Method: (self: WrappedInstance<I>, ...any?) -> ...any? } | { Event: (Signal: Signal) -> () } }
+    @within WrappedInstance
+
+    Properties type for ```WrappedInstance:Add``` method
+]=]
+
+--[=[
+    @prop Cleaning Signal<number>
+    @within WrappedInstance
+
+    A signal that will get fired while cleaning
+]=]
+
+--[=[
+    @prop Index number
+    @within WrappedInstance
+
+    The index of where the wrapped instance is stored in ```WrapperService.Instances```
+]=]
+
+--[=[
+    @prop Instance I
+    @within WrappedInstance
+
+    The instance that was passed in ```WrapperService:Create```
+]=]
+
+--[=[
+    @since v1.0.0
+    @param Properties Properties<I>
+    
+    Adds new properties.
+]=]
+function WrappedInstance:Add(properties: Properties<Instance>): ()
     assert(Checks.Add(self, properties))
 
     for name, propertyContents in pairs(properties) do
@@ -39,7 +77,7 @@ function WrappedInstance:Add(properties: Properties<Instance, any>): ()
 				end,
 
 				Event = function()
-                    local newSignal: Signal<any> = Signal.new() :: any
+                    local newSignal: Signal = Signal.new() :: any
 					task.spawn(value, newSignal)
 
 					return newSignal
@@ -64,7 +102,16 @@ function WrappedInstance:Add(properties: Properties<Instance, any>): ()
 	end
 end
 
-function WrappedInstance:WaitForProperty(propertyKey: any, timeOut: number): any?
+--[=[
+    @since v1.0.0
+    @param propertyKey any
+    @param timeOut number?
+    @return any
+    @yields
+    
+    Similar to ```Instance:WaitForChild``` but for properties.
+]=]
+function WrappedInstance:WaitForProperty(propertyKey: any, timeOut: number?): any?
     assert(Checks.WaitForProperty(self, propertyKey, timeOut))
 
 	local timer = os.clock()
@@ -86,6 +133,12 @@ function WrappedInstance:WaitForProperty(propertyKey: any, timeOut: number): any
 	end
 end
 
+--[=[
+    @since v1.0.0
+    @return I
+    
+    Makes the wrapped instance unuseable.
+]=]
 function WrappedInstance:Clean(): Instance
     assert(Checks.Clean(self))
 
@@ -94,7 +147,6 @@ function WrappedInstance:Clean(): Instance
     self.Cleaning:Fire(self.Index)
     
     table.clear(self)
-
     setmetatable(self, nil)
 
     return Instance
@@ -128,7 +180,7 @@ end
 
 function WrappedInstance:__newindex(key: any, value: any): ()
     local exists: boolean = pcall(function()
-        local test = self.Instance[key]
+        local _test = self.Instance[key]
     end)
 
     if exists then 
