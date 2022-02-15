@@ -45,11 +45,11 @@ function WrapperService:Create<I>(Instance: I): WrappedInstance<I>
 
 	Wrapped._Public.Called:Connect(function(methodKey)
         if tostring(methodKey) == "Clean" then
-            for InstanceIndex = (self._Index + 1), #self.Instances do
+            for InstanceIndex = (Wrapped._Index + 1), #self.Instances do
                 self.Instances[InstanceIndex]._Index -= 1
             end
     
-            table.remove(self.Instances, self._Index)
+            table.remove(self.Instances, Wrapped._Index)
         end
     end)
 
