@@ -1,3 +1,4 @@
+local Signal = require(script.Signal)
 local GetChecks = require(script.GetChecks)
 local WrappedInstance = require(script.WrappedInstance)
 
@@ -20,6 +21,15 @@ function WrapperService:Create<I>(Instance: I): WrappedInstance<I>
     
     Wrapped.Instance = Instance :: Instance
     Wrapped.Index = (#self.Instances + 1) :: number
+    Wrapped.Cleaning = Signal.new() :: Signal<number>
+    
+    Wrapped.Cleaning:Connect(function(Index: number)
+        for Index = (Index + 1), #self.Instances do
+            self.Instances[Index].Index -= 1
+        end
+
+        table.remove(self.Instances, Index)
+    end)
 
 	setmetatable(Wrapped, WrappedInstance)
     table.insert(self.Instances, Wrapped)

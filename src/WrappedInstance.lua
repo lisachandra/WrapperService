@@ -16,6 +16,7 @@ type Properties<I, T...> = {
 export type Signal<T...> = Signal.Signal<T...>
 
 export type WrappedInstance<I> = {
+    Cleaning: Signal<number>,
     Instance: I,
     Index: number,
 
@@ -90,13 +91,8 @@ function WrappedInstance:Clean(): Instance
 
     local Instance = self.Instance
     
-    for Index = (self.Index :: number + 1), #WrappedInstance.Instances do
-        local WrappedInstance = WrappedInstance.Instances[Index]
-
-        WrappedInstance.Index -= 1
-    end
-
-    table.remove(WrappedInstance.Instances, self.Index :: number)
+    self.Cleaning:Fire(self.Index)
+    
     table.clear(self)
 
     setmetatable(self, nil)
