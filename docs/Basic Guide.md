@@ -3,70 +3,47 @@
 Lets say you wanna add a custom property, method and event to the workspace.
 First we need to wrap the workspace.
 ```lua
---[[
-    we can add IntelliSense by adding a @type comment on top of the variable 
-    (For people that use EmmyLua, Roblox LSP, sumneko's lua language server, etc.)
-]]
+local WrapperService = require(path.to.WrapperService)
 
-local workspace = WrapperService:new(workspace)
+local Workspace = WrapperService:Create(workspace)
 ```
 Now we have created a wrapped version of the workspace,
 we can add properties to them!
 ```lua
-workspace:Add({
+Workspace:Add({
+    -- property keys don't need to be strings, but it is recommended to use strings
     NewString = {
         Property = "This is a new property!"
     },
 
     GetNewString = {
+        -- self is the wrapped instance itself
         Method = function(self)
+            self.GetNewStringCalled:Fire(self.NewString)
             return self.NewString
         end
     },
 
-    onNewStringChanged = {
-        Event = function(signal) -- This function will be the signal's fire handler.
-            repeat
-            task.wait()
-            until signal.__callbacks[1] -- Waits until a callback is connected
-
-            --[[
-                We have to use :WaitForProperty because 
-                this function may get called first before NewString is added
-            ]]
-
-            local currentValue = workspace:WaitForProperty("NewString")
-
-            while true do
-                task.wait()
-
-                if WrapperService.isWrapped(workspace) and workspace:WaitForProperty("NewString") ~= currentValue then
-                    signal:Fire(workspace:WaitForProperty("NewString"), currentValue)
-                    currentValue = workspace:WaitForProperty("NewString")
-                elseif not WrapperService.isWrapped(workspace) then
-                    --[[
-                        will break the loop when the 
-                        wrapped version of workspace is destroyed/cleaned
-                    ]]
-
-                    break 
-                end
-            end
-        end
-    },
+    GetNewStringCalled = {
+        --[[ 
+            We make an empty function here because
+            this doesn't handle firing the signal,
+            the method itself does.
+        ]]
+        Event = function(signal) end
+    }
 })
 ```
 Now we can use them as normal properties!
 ```lua
-local Connection = workspace.onNewStringChanged:Connect(function(newValue, lastValue)
-    print(newValue, lastValue) -- Changed This is a new property!
+print(Workspace.NewString) -- "This is a new property!"
+
+local Connection
+Connection = Workspace.GetNewStringCalled:Connect(function(value)
+    print("GetNewString was called:", value)
+    Connection:Disconnect()
 end)
 
-task.wait(1)
-
-workspace.NewString = "Changed"
-
-local newString = workspace:GetNewString()
-print(newString) -- Changed
+Workspace:GetNewString() -- The callback above will run when calling this
 ```
 There is still more to explore, go to the API Docs for more information!

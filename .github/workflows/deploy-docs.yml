@@ -20,7 +20,7 @@ jobs:
           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
           git checkout "${GITHUB_REF:11}" --
           git add -AN
-          echo ::set-output name=changed::$(if git diff-index --quiet HEAD~1 -- docs moonwave; then echo "false"; else echo "true"; fi)
+          echo ::set-output name=changed::$(if git diff-index --quiet HEAD~1 -- docs src; then echo "false"; else echo "true"; fi)
 
       - name: Install node for installing moonwave
         if: steps.git-check.outputs.changed == 'true'
@@ -39,4 +39,4 @@ jobs:
         run: |
           git remote set-url origin https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git 
           git config --global user.name "github-actions"
-          moonwave build --code moonwave --publish
+          moonwave build --publish
