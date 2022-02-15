@@ -31,26 +31,26 @@ local Checks = GetChecks(WrapperService, true)
     Creates and returns a new WrappedInstance from the Instance
 ]=]
 function WrapperService:Create<I>(Instance: I): WrappedInstance<I>
-    assert(Checks.Create(self, Instance))
+	assert(Checks.Create(self, Instance))
 
-    local Wrapped = {}
-    
-    Wrapped.Instance = Instance :: Instance
-    Wrapped.Index = (#self.Instances + 1) :: number
-    Wrapped.Cleaning = Signal.new() :: Signal
-    
-    Wrapped.Cleaning:Connect(function(Index: number)
-        for InstanceIndex = (Index + 1), #self.Instances do
-            self.Instances[InstanceIndex].Index -= 1
-        end
+	local Wrapped = {}
 
-        table.remove(self.Instances, Index)
-    end)
+	Wrapped.Instance = Instance :: Instance
+	Wrapped.Index = (#self.Instances + 1) :: number
+	Wrapped.Cleaning = Signal.new() :: Signal
+
+	Wrapped.Cleaning:Connect(function(Index: number)
+		for InstanceIndex = (Index + 1), #self.Instances do
+			self.Instances[InstanceIndex].Index -= 1
+		end
+
+		table.remove(self.Instances, Index)
+	end)
 
 	setmetatable(Wrapped, WrappedInstance)
-    table.insert(self.Instances, Wrapped)
+	table.insert(self.Instances, Wrapped)
 
-    return Wrapped :: any
+	return Wrapped :: any
 end
 
 --[=[
@@ -62,12 +62,10 @@ end
     if it is not it will return false and an error message
 ]=]
 function WrapperService:Is(object: any): (boolean, string?)
-    assert(Checks.Is(self, object))
+	assert(Checks.Is(self, object))
 
-    return (
-        type(object) == "table"
-        and getmetatable(object) == WrappedInstance
-    ) or false, ("expected WrappedInstance got %s"):format(typeof(object))
+	return (type(object) == "table" and getmetatable(object) == WrappedInstance) or false,
+		("expected WrappedInstance got %s"):format(typeof(object))
 end
 
 --[=[
@@ -78,9 +76,9 @@ end
     Gets a wrapped instance in ```WrapperService.Instances``` from an index
 ]=]
 function WrapperService:GetByIndex(Index: number): WrappedInstance<Instance>?
-    assert(Checks.GetByIndex(self, Index))
+	assert(Checks.GetByIndex(self, Index))
 
-    return self.Instances[Index] :: any
+	return self.Instances[Index] :: any
 end
 
 --[=[
@@ -91,13 +89,13 @@ end
     Gets a wrapped instance in ```WrapperService.Instances``` from an instance
 ]=]
 function WrapperService:GetByInstance<I>(Instance: I): WrappedInstance<I>?
-    assert(Checks.GetByInstance(self, Instance))
+	assert(Checks.GetByInstance(self, Instance))
 
-    for _index, wrappedInstance in ipairs(self.Instances) do
-        if wrappedInstance.Instance == Instance then
-            return wrappedInstance :: any
-        end
-    end
+	for _index, wrappedInstance in ipairs(self.Instances) do
+		if wrappedInstance.Instance == Instance then
+			return wrappedInstance :: any
+		end
+	end
 end
 
 return WrapperService

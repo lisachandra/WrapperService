@@ -1,4 +1,5 @@
---[[--------------------------------[=]-------------------------------------]]--
+--[[--------------------------------[=]-------------------------------------]]
+--
 --               Batched Yield-Safe Signal Implementation                     --
 -- This is a Signal class which has effectively identical behavior to a       --
 -- normal RBXScriptSignal, with the only difference being a couple extra      --
@@ -22,19 +23,20 @@
 -- Authors:                                                                   --
 --   stravant - July 31st, 2021 - Created the file.                           --
 --   lisachandra - February 12th, 2022 - Added .Is and luau types             --
---[[--------------------------------[=]-------------------------------------]]--
+--[[--------------------------------[=]-------------------------------------]]
+--
 
 export type Connection = {
 	Connected: boolean,
-	
-	Disconnect: (self: Connection) -> ()
+
+	Disconnect: (self: Connection) -> (),
 }
 
 export type Signal = {
 	DisconnectAll: (self: Signal) -> (),
 	Connect: (self: Signal, Callback: (...any?) -> ()) -> Connection,
 	Fire: (self: Signal, ...any?) -> (),
-	Wait: (self: Signal) -> ...any?
+	Wait: (self: Signal) -> ...any?,
 }
 
 -- The currently idle thread to run the next handler on
@@ -53,7 +55,7 @@ local function acquireRunnerThreadAndCallEventHandler(fn, ...)
 	freeRunnerThread = acquiredRunnerThread
 end
 
--- Coroutine runner that we create coroutines of. The coroutine can be 
+-- Coroutine runner that we create coroutines of. The coroutine can be
 -- repeatedly resumed with functions to run followed by the argument to run
 -- them with.
 local function runEventHandlerInFreeThread(...)
@@ -104,7 +106,7 @@ setmetatable(Connection, {
 	end,
 	__newindex = function(_tb, key, _value)
 		error(("Attempt to set Connection::%s (not a valid member)"):format(tostring(key)), 2)
-	end
+	end,
 })
 
 -- Signal class
@@ -113,15 +115,13 @@ Signal.__index = Signal
 
 function Signal.new()
 	return setmetatable({
-		_handlerListHead = false,	
+		_handlerListHead = false,
 	}, Signal)
 end
 
 function Signal.Is(self): (boolean, string?)
-	return (
-		type(self) == "table"
-		and getmetatable(self) == Signal or getmetatable(self) == Connection
-	) or false, "Signal or Connection expected, got " .. typeof(self)
+	return (type(self) == "table" and getmetatable(self) == Signal or getmetatable(self) == Connection) or false,
+		"Signal or Connection expected, got " .. typeof(self)
 end
 
 function Signal:Connect(fn)
@@ -162,7 +162,7 @@ end
 -- a Signal:Connect() which disconnects itself.
 function Signal:Wait()
 	local waitingCoroutine = coroutine.running()
-	local cn;
+	local cn
 	cn = self:Connect(function(...)
 		cn:Disconnect()
 		task.spawn(waitingCoroutine, ...)
@@ -177,7 +177,7 @@ setmetatable(Signal, {
 	end,
 	__newindex = function(_tb, key, _value)
 		error(("Attempt to set Signal::%s (not a valid member)"):format(tostring(key)), 2)
-	end
+	end,
 })
 
 return Signal
