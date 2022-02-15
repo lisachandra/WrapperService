@@ -14,7 +14,7 @@ WrapperService.Instances = {} :: { WrappedInstance<Instance> }
 local Checks = GetChecks(WrapperService, true)
 
 function WrapperService:Create<I>(Instance: I): WrappedInstance<I>
-    assert(Checks.new(self, Instance))
+    assert(Checks.Create(self, Instance))
 
     local Wrapped = {}
     

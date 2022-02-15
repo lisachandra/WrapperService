@@ -17,7 +17,7 @@ return function()
 
     describe("Is", function()
         it("should return true", function()
-            local boolean = WrapperService:Is(setmetatable({}, WrapperService))
+            local boolean = WrapperService:Is(WrapperService:Create(workspace))
 
             expect(boolean).to.be.equal(true)
         end)
