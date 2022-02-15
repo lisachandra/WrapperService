@@ -31,8 +31,8 @@ return function()
     end)
 
     describe("Clean", function()
-        it("should destroy the WrappedInstance and return the instance that was passed in .new", function()
-            local Workspace = WrapperService.new(workspace)
+        it("should destroy the WrappedInstance and return the instance that was passed in :Create", function()
+            local Workspace = WrapperService:Create(workspace)
             local Index = Workspace.Index
 
             Workspace = Workspace:Clean()
@@ -43,28 +43,28 @@ return function()
         end)
 
         it("should destroy the WrappedInstance and shift index", function()
-            local Workspace = WrapperService.new(workspace)
-            local otherWorkspace = WrapperService.new(workspace)
+            local Workspace = WrapperService:Create(workspace)
+            local otherWorkspace = WrapperService:Create(workspace)
 
             local lastIndex = otherWorkspace.Index
 
             Workspace = Workspace:Clean()
             
             expect(type(table.find(WrapperService.Instances, otherWorkspace))).to.be.equal("number")
-            expect(otherWorkspace.Index == lastIndex - 1).to.be.equal(true)
+            expect(otherWorkspace.Index == (lastIndex - 1)).to.be.equal(true)
         end)
     end)
     
-    describe("new", function()
+    describe("Create", function()
         it("should create a WrappedInstance", function(context)
-            local Workspace = WrapperService.new(workspace)
+            local Workspace = WrapperService:Create(workspace)
             context.addWrappedInstance(workspace)
 
             expect(WrapperService:Is(Workspace)).to.be.equal(true)
         end)
 
         it("should connect to an event", function(context)
-            local Workspace = WrapperService.new(workspace)
+            local Workspace = WrapperService:Create(workspace)
             context.addWrappedInstance(Workspace)
 
             local event
@@ -76,14 +76,14 @@ return function()
         end)
 
         it("should return the name as Workspace", function(context)
-            local Workspace = WrapperService.new(workspace)
+            local Workspace = WrapperService:Create(workspace)
             context.addWrappedInstance(Workspace)
 
             expect(Workspace.Name).to.be.equal("Workspace")
         end)
 
         it("should modify the gravity to 1", function(context)
-            local Workspace = WrapperService.new(workspace)
+            local Workspace = WrapperService:Create(workspace)
 
             context.addWrappedInstance(Workspace)
             context.addRevertableChanges("Gravity", {
@@ -96,7 +96,7 @@ return function()
         end)
 
         it("should correctly call a method", function(context)
-            local Workspace = WrapperService.new(workspace)
+            local Workspace = WrapperService:Create(workspace)
             context.addWrappedInstance(Workspace)
 
             local children = Workspace:GetChildren()
@@ -107,7 +107,7 @@ return function()
 
     describe("GetByIndex", function()
         it("should return a WrappedInstance", function(context)
-            local Workspace = WrapperService.new(workspace)
+            local Workspace = WrapperService:Create(workspace)
             context.addWrappedInstance(Workspace)
 
             Workspace = WrapperService:GetByIndex(Workspace.Index)
@@ -118,7 +118,7 @@ return function()
 
     describe("GetByInstance", function()
         it("should return a WrappedInstance", function(context)
-            local Workspace = WrapperService.new(workspace)
+            local Workspace = WrapperService:Create(workspace)
             context.addWrappedInstance(Workspace)
 
             Workspace = WrapperService:GetByInstance(workspace)
@@ -129,7 +129,7 @@ return function()
 
     describe("Add", function()
         it("should make a new property and a method", function(context)
-            local Workspace = WrapperService.new(workspace)
+            local Workspace = WrapperService:Create(workspace)
             context.addWrappedInstance(Workspace)
 
             Workspace:Add({
@@ -149,7 +149,7 @@ return function()
         end)
 
         it("should make a new signal", function(context)
-            local Workspace = WrapperService.new(workspace)
+            local Workspace = WrapperService:Create(workspace)
             context.addWrappedInstance(Workspace)
 
             Workspace:Add({
@@ -164,7 +164,7 @@ return function()
 
     describe("WaitForProperty", function()
         it("should wait for a property", function(context)
-            local Workspace = WrapperService.new(workspace)
+            local Workspace = WrapperService:Create(workspace)
             context.addWrappedInstance(Workspace)
 
             Workspace:Add({
@@ -185,7 +185,7 @@ return function()
         end)
 
         it("should timeout while waiting for a property", function(context)
-            local Workspace = WrapperService.new(workspace)
+            local Workspace = WrapperService:Create(workspace)
             context.addWrappedInstance(Workspace)
 
             Workspace:Add({
@@ -205,7 +205,7 @@ return function()
         end)
 
         it("should wait for a property with a timeout", function(context)
-            local Workspace = WrapperService.new(workspace)
+            local Workspace = WrapperService:Create(workspace)
             context.addWrappedInstance(Workspace)
 
             Workspace:Add({

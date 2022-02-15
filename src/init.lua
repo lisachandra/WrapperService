@@ -13,39 +13,39 @@ WrapperService.Instances = {} :: { WrappedInstance<Instance> }
 
 local Checks = GetChecks(WrapperService, true)
 
-function WrapperService.new<I>(Instance: I): WrappedInstance<I>
-    assert(Checks.new(Instance))
+function WrapperService:Create<I>(Instance: I): WrappedInstance<I>
+    assert(Checks.new(self, Instance))
 
-    local self = {}
+    local Wrapped = {}
     
-    self.Instance = Instance :: Instance
-    self.Index = (#WrapperService.Instances + 1) :: number
+    Wrapped.Instance = Instance :: Instance
+    Wrapped.Index = (#self.Instances + 1) :: number
 
-	setmetatable(self, WrappedInstance)
-    table.insert(WrapperService.Instances, self)
+	setmetatable(Wrapped, WrappedInstance)
+    table.insert(self.Instances, Wrapped)
 
-    return self :: any
+    return Wrapped :: any
 end
 
-function WrapperService.Is(self: any): (boolean, string?)
-    assert(Checks.Is(self))
+function WrapperService:Is(object: any): (boolean, string?)
+    assert(Checks.Is(self, object))
 
     return (
-        type(self) == "table"
-        and getmetatable(self) == WrappedInstance
-    ) or false, ("expected WrappedInstance got %s"):format(typeof(self))
+        type(object) == "table"
+        and getmetatable(object) == WrappedInstance
+    ) or false, ("expected WrappedInstance got %s"):format(typeof(object))
 end
 
-function WrapperService.GetByIndex(Index: number): WrappedInstance<Instance>?
-    assert(Checks.GetByIndex(Index))
+function WrapperService:GetByIndex(Index: number): WrappedInstance<Instance>?
+    assert(Checks.GetByIndex(self, Index))
 
-    return WrapperService.Instances[Index] :: any
+    return self.Instances[Index] :: any
 end
 
-function WrapperService.GetByInstance<I>(Instance: I): WrappedInstance<I>?
-    assert(Checks.GetByInstance(Instance))
+function WrapperService:GetByInstance<I>(Instance: I): WrappedInstance<I>?
+    assert(Checks.GetByInstance(self, Instance))
 
-    for _index, WrappedInstance in ipairs(WrapperService.Instances) do
+    for _index, WrappedInstance in ipairs(self.Instances) do
         if WrappedInstance.Instance == Instance then
             return WrappedInstance :: any
         end
