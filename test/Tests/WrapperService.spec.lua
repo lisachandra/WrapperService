@@ -80,9 +80,9 @@ return function()
             context.addWrappedInstance(Workspace)
 
             local event
-            event = Workspace.Changed:Connect(function()
-                event:Disconnect()
-            end)
+            event = Workspace.ChildAdded:Connect(function() end)
+            
+            event:Disconnect()
 
             expect(typeof(event)).to.be.equal("RBXScriptConnection")
         end)
@@ -151,7 +151,7 @@ return function()
 
                 GetInteger = {
                     Method = function(self)
-                        return self.Index
+                        return self._Index
                     end
                 }
             })
@@ -187,7 +187,7 @@ return function()
             Workspace:Clean()
 
             expect(methodString).to.be.equal("Clean")
-            expect(Workspace).to.be.equal(nil)
+            expect(WrapperService:Is(Workspace)).to.be.equal(false)
         end)
 
         it("should fire with arguments when calling an instance method", function(context)
@@ -214,7 +214,7 @@ return function()
             Workspace:Add({
                 GetInteger = {
                     Method = function(self)
-                        return self.Index
+                        return self._Index
                     end
                 }
             })

@@ -44,7 +44,7 @@ local Checks = GetChecks(WrappedInstance)
 function WrappedInstance:Add(properties: Properties<Instance>): ()
 	assert(Checks.Add(self, properties))
 
-	for name, propertyContents in pairs(properties) do
+	for key, propertyContents in pairs(properties) do
 		for valueType, value in pairs(propertyContents) do
 			local GetValues = {
 				Property = function()
@@ -61,7 +61,7 @@ function WrappedInstance:Add(properties: Properties<Instance>): ()
 				Method = function()
 					return function(otherSelf, ...)
 						if otherSelf ~= self then
-							warn(("Expected `:` not `.` while calling member function %s"):format(tostring(name)))
+							warn(("Expected `:` not `.` while calling member function %s"):format(tostring(key)))
 						else
 							return value(otherSelf, ...)
 						end
@@ -72,7 +72,7 @@ function WrappedInstance:Add(properties: Properties<Instance>): ()
 			local GetValue = GetValues[valueType]
 			local Value = GetValue()
 
-			rawset(self, tostring(name), Value)
+			self._Public[key] = Value
 		end
 	end
 end
