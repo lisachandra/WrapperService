@@ -16,8 +16,8 @@ return function()
     end
 
     describe("Is", function()
-        it("should return true", function()
-            local boolean = WrapperService:Is(WrapperService:Create(workspace))
+        it("should return true", function(context)
+            local boolean = WrapperService:Is(context.addWrappedInstance(WrapperService:Create(workspace)))
 
             expect(boolean).to.be.equal(true)
         end)

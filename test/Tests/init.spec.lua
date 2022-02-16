@@ -18,10 +18,14 @@ return function()
 
         context.addWrappedInstance = function(wrappedInstance)
             context.wrappedInstances[#context.wrappedInstances + 1] = wrappedInstance
+
+            return wrappedInstance
         end
 
         context.addRevertableChanges = function(propertyName, revertableChanges)
-            context.revertableChanges[propertyName] = revertableChanges 
+            context.revertableChanges[propertyName] = revertableChanges
+
+            return revertableChanges
         end
     end)
 

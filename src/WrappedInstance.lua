@@ -144,7 +144,7 @@ function WrappedInstance:__newindex(key: any, value: any): ()
 
     if property then
         self._Public[key] = value
-        Changed:Fire(property, value)
+        Changed:Fire(key, property, value)
     end
 
 	local exists: boolean, instanceProperty: string | any = pcall(function()
@@ -153,7 +153,7 @@ function WrappedInstance:__newindex(key: any, value: any): ()
 
 	if exists then
 		self._Instance[key] = value
-        Changed:Fire(instanceProperty, value)
+        Changed:Fire(key, instanceProperty, value)
 	end
 end
 
