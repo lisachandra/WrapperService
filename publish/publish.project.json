@@ -6,8 +6,9 @@
         "ReplicatedStorage": {
             "$className": "ReplicatedStorage",
 
-            "Packages": {
-                "$path": "Packages"
+            "WrapperService": {
+                "$ignoreUnknownInstances": true,
+                "$path": "../src"
             }
         }
     }

@@ -35,13 +35,6 @@ jobs:
           echo "$WALLY_AUTH" > ~/.wally/auth.toml
           wally publish
 
-      - name: Install WrapperService
-        shell: bash
-        run: |
-          cd publish
-          wally install
-          cd ..
-
       - name: Build place file
         run: |
           cd publish
@@ -59,7 +52,7 @@ jobs:
         shell: bash
         run: |
           cd publish
-          zip -r WrapperService.zip Packages
+          zip -r WrapperService.zip ../src
           cd ..
 
       - name: Create release note
