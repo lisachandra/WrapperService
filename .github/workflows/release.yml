@@ -23,8 +23,8 @@ jobs:
         env:
           VERSION: ${{ github.ref_name }}
         run: |
-          sed -i 's/.*version.*/version = '"\"$VERSION\""'/' wally.toml
-          sed -i "s|.*VERSION.*|$VERSION" publish/wally.toml
+          sed -i 's/version.*/version = '"\"$VERSION\""'/' wally.toml
+          sed -i "s/VERSION/$VERSION/" wally.toml
 
       - name: Publish release to Wally
         shell: bash
