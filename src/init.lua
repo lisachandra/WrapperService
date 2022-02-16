@@ -36,22 +36,22 @@ function WrapperService:Create<I>(Instance: I): WrappedInstance<I>
 
 	local Wrapped = { _Public = {} }
 
-    Wrapped._Janitor = Janitor.new()
+	Wrapped._Janitor = Janitor.new()
 	Wrapped._Instance = Instance
 	Wrapped._Index = #self.Instances + 1
 
-    Wrapped._Public.Changed = Signal.new(Wrapped._Janitor)
-    Wrapped._Public.Called = Signal.new(Wrapped._Janitor)
+	Wrapped._Public.Changed = Signal.new(Wrapped._Janitor)
+	Wrapped._Public.Called = Signal.new(Wrapped._Janitor)
 
 	Wrapped._Public.Called:Connect(function(methodKey)
-        if tostring(methodKey) == "Clean" then
-            for InstanceIndex = (Wrapped._Index + 1), #self.Instances do
-                self.Instances[InstanceIndex]._Index -= 1
-            end
-    
-            table.remove(self.Instances, Wrapped._Index)
-        end
-    end)
+		if tostring(methodKey) == "Clean" then
+			for InstanceIndex = (Wrapped._Index + 1), #self.Instances do
+				self.Instances[InstanceIndex]._Index -= 1
+			end
+
+			table.remove(self.Instances, Wrapped._Index)
+		end
+	end)
 
 	setmetatable(Wrapped, WrappedInstance)
 	table.insert(self.Instances, Wrapped)
