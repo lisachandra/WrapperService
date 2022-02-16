@@ -29,7 +29,7 @@ local WrappedInstance = {}
 local Checks = GetChecks(WrappedInstance)
 
 --[=[
-    @type Properties<I> {  [any]: {Property: any  } | {  Method: (self: WrappedInstance<I>, ...any?) -> ...any?  } | {  Event: (Signal: Signal) -> () }  }
+    @type Properties<I> {[any]: {Property: any  }|{ Method: (self: WrappedInstance<I>, ...any?) -> ...any?}|{Event: (Signal: Signal) -> ()}}
     @within WrappedInstance
 
     Properties type for ```WrappedInstance:Add``` method
@@ -40,7 +40,11 @@ local Checks = GetChecks(WrappedInstance)
     @within WrappedInstance
 
     A signal that fires when __newindex successfully sets a new value   
-    Args: propertyKey: any, lastValue: any, newValue: any
+    Args: ```propertyKey: any, lastValue: any, newValue: any```
+
+    :::note
+    Use :GetPropertyChangedSignal for normal properties
+    :::
 ]=]
 
 --[=[
@@ -48,7 +52,7 @@ local Checks = GetChecks(WrappedInstance)
     @within WrappedInstance
 
     A signal that fires when a function is called from __index   
-    Args: methodKey: any, args: ...any?
+    Args: ```methodKey: any, args: ...any?```
 ]=]
 
 --[=[
@@ -57,10 +61,10 @@ local Checks = GetChecks(WrappedInstance)
     
     Adds new properties.
 ]=]
-function WrappedInstance:Add(properties: Properties<Instance>): ()
-	assert(Checks.Add(self, properties))
+function WrappedInstance:Add(Properties: Properties<Instance>): ()
+	assert(Checks.Add(self, Properties))
 
-	for key, propertyContents in pairs(properties) do
+	for key, propertyContents in pairs(Properties) do
 		for valueType, value in pairs(propertyContents) do
 			local GetValues = {
 				Property = function()
