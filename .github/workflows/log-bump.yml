@@ -29,7 +29,7 @@ jobs:
           VERSION: ${{ github.event.inputs.version }}
         run: |
           sed -i 's/version.*/version = '"\"$VERSION\""'/' wally.toml
-          sed -i "s/VERSION/$VERSION/" wally.toml
+          sed -i "s/VERSION/$VERSION/" publish/wally.toml
 
       - name: Create changelog
         shell: bash
