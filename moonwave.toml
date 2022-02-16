@@ -3,6 +3,8 @@ changelog = true
 gitSourceBranch = "main"
 
 [docusaurus]
+onBrokenLinks = "throw"
+onBrokenMarkdownLinks = "warn"
 tagline = "A service that allows you to create custom properties for roblox instances."
 
 [home]
