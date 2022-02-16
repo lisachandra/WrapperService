@@ -8,9 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - ```WrapperService:GetByIndex(Index: number) -> WrappedInstance<Instance>```
-- ```WrappedInstance.Cleaning :: Signal<number>```
-- ```WrappedInstance:GetPropertyChangedSignal(propertyKey: any) -> Signal<any, any>```
-- ```WrappedInstance:GetMethodCalledSignal(methodName: any) -> Signal<...any?>```
+- ```WrappedInstance.Changed :: Signal<propertyKey: any, lastValue: any, newValue: any>``` Fires when a property has changed from __newindex.
+- ```WrappedInstance.Called :: Signal<methodKey: any, args: ...any?>``` Fires when a function/method has been called from __index
 - Better Luau types
 
 ### Changed
@@ -20,6 +19,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ```WrapperService:GetWrappedInstance``` Renamed to ```WrapperService:GetByInstance```
 - All non metatable functions now use `:` instead of `.`
 - [Signal](src/Signal.lua) module now uses luau typed GoodSignal instead of SignalService
+
+### Removed
+
+- ```WrappedInstance:WaitForProperty```
 
 ## 0.3.6 - 2022-01-05
 ### Added

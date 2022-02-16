@@ -1,48 +1,107 @@
-local SignalService = require(script.Parent:WaitForChild("SignalService"))
+local Signal = require(script.Utilities.Signal)
+local Janitor = require(script.Utilities.Janitor)
+local GetChecks = require(script.GetChecks)
+local WrappedInstance = require(script.WrappedInstance)
 
-type Dictionary<T> = { [string]: T }
-type Array<T> = { [number]: T }
+export type Signal = WrappedInstance.Signal
+export type WrappedInstance<I> = WrappedInstance.WrappedInstance<I>
 
-type Signal = SignalService.Signal
+--[=[
+    @class WrapperService
 
-type ValueTypes = {
-	Property: any,
-} | {
-	Method: (self: WrappedInstance, ...any) -> ...any,
-} | {
-	Event: (signal: Signal) -> (),
-}
+    A service that allows you to create custom properties for roblox instances  
+    Github: [https://github.com/zxibs/WrapperService](https://github.com/zxibs/WrapperService)
+]=]
+local WrapperService = {}
 
-export type WrappedInstance = {
-	__id: string,
+--[=[
+    @prop Instances { WrappedInstance<Instance> }
+    @within WrapperService
 
-	Instance: Instance,
+    A table containing all of the wrapped instances that have been created and not cleaned.
+]=]
+WrapperService.Instances = {} :: { WrappedInstance<Instance> }
 
-	Add: (self: WrappedInstance, propertiesToAdd: Dictionary<ValueTypes>) -> (),
-	Cleanup: (self: WrappedInstance) -> Instance,
-	WaitForProperty: (self: WrappedInstance, propertyName: string, timeOut: number?) -> any,
-}
+local Checks = GetChecks(WrapperService, true)
 
-export type WrapperService = {
-	__wrappedInstance: Dictionary<WrappedInstance>,
+--[=[
+    @since v1.0.0
+    @param Instance I
+    @return WrappedInstance<I>
 
-	new: (self: WrapperService, instanceToWrap: Instance) -> WrappedInstance,
-	isWrapped: (wrappedInstance: WrappedInstance?) -> (boolean, string?),
-	GetWrappedInstance: (self: WrapperService, instanceToGet: Instance) -> WrappedInstance?,
-}
+    Creates and returns a new WrappedInstance from the Instance
+]=]
+function WrapperService:Create<I>(Instance: I): WrappedInstance<I>
+	assert(Checks.Create(self, Instance))
 
-local strict = require(script:WaitForChild("strict"))
+	local Wrapped = { _Public = {} }
 
---[[
-     A service that allows you to create custom properties for roblox instances  
-     Github: [https://github.com/zxibs/WrapperService](https://github.com/zxibs/WrapperService)
-]]
-local WrapperService: WrapperService = strict({
-	__wrappedInstances = {},
+	Wrapped._Janitor = Janitor.new()
+	Wrapped._Instance = Instance
+	Wrapped._Index = #self.Instances + 1
 
-	new = require(script:WaitForChild("new")),
-	isWrapped = require(script:WaitForChild("isWrapped")),
-	GetWrappedInstance = require(script:WaitForChild("GetWrappedInstance")),
-}, "WrapperService")
+	Wrapped._Public.Changed = Signal.new(Wrapped._Janitor)
+	Wrapped._Public.Called = Signal.new(Wrapped._Janitor)
+
+	Wrapped._Public.Called:Connect(function(methodKey)
+		if tostring(methodKey) == "Clean" then
+			for InstanceIndex = (Wrapped._Index + 1), #self.Instances do
+				self.Instances[InstanceIndex]._Index -= 1
+			end
+
+			table.remove(self.Instances, Wrapped._Index)
+		end
+	end)
+
+	setmetatable(Wrapped, WrappedInstance)
+	table.insert(self.Instances, Wrapped)
+
+	return Wrapped :: any
+end
+
+--[=[
+    @since v1.0.0
+    @param object any
+    @return ( boolean, string? )
+
+    A method for checking if an object is a WrappedInstance,
+    if it is not it will return false and an error message
+]=]
+function WrapperService:Is(object: any): (boolean, string?)
+	assert(Checks.Is(self, object))
+
+	return (type(object) == "table" and getmetatable(object) == WrappedInstance) or false,
+		("expected WrappedInstance got %s"):format(typeof(object))
+end
+
+--[=[
+    @since v1.0.0
+    @param Index number
+    @return WrappedInstance<Instance>
+
+    Gets a wrapped instance in ```WrapperService.Instances``` from an index
+]=]
+function WrapperService:GetByIndex(Index: number): WrappedInstance<Instance>?
+	assert(Checks.GetByIndex(self, Index))
+
+	return self.Instances[Index] :: any
+end
+
+--[=[
+    @since v1.0.0
+    @param Instance I
+    @return WrappedInstance<I>
+
+    Gets a wrapped instance in ```WrapperService.Instances``` from an instance
+]=]
+function WrapperService:GetByInstance<I>(Instance: I): WrappedInstance<I>?
+	assert(Checks.GetByInstance(self, Instance))
+
+	for _index, wrappedInstance in ipairs(self.Instances) do
+		if wrappedInstance._Instance == Instance then
+			return wrappedInstance :: any
+		end
+	end
+end
 
 return WrapperService
