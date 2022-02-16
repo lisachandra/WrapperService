@@ -52,7 +52,7 @@ function WrappedInstance:Add(properties: Properties<Instance>): ()
 				end,
 
 				Event = function()
-					local newSignal: Signal = self._Janitor:Add(Signal.new(), "DisconnectAll")
+					local newSignal: Signal = Signal.new(self._Janitor) :: any
 					task.spawn(value, newSignal)
 
 					return newSignal
