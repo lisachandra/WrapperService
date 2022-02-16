@@ -114,10 +114,13 @@ local Signal = {}
 Signal.__index = Signal
 
 function Signal.new(janitor)
-	return janitor:Add(setmetatable({
-		_handlerListHead = false,
-		_janitor = janitor,
-	}, Signal), "DisconnectAll")
+	return janitor:Add(
+		setmetatable({
+			_handlerListHead = false,
+			_janitor = janitor,
+		}, Signal),
+		"DisconnectAll"
+	)
 end
 
 function Signal.Is(self): (boolean, string?)
