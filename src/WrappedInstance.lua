@@ -15,11 +15,11 @@ type Properties<I> = {
 export type Signal = Signal.Signal
 
 export type WrappedInstance<I> = {
-    Changed: Signal,
-    Called: Signal,
+	Changed: Signal,
+	Called: Signal,
 
 	Add: (self: WrappedInstance<I>, properties: Properties<I>) -> (),
-	Clean: (self: WrappedInstance<I>) -> I
+	Clean: (self: WrappedInstance<I>) -> I,
 } & { [any]: any } & I
 
 --[=[
@@ -98,23 +98,23 @@ function WrappedInstance:Clean(): Instance
 end
 
 function WrappedInstance:__index(key: any): any?
-    local Called = self._Public.Called
-    local property = self._Public[key]
-
-    if type(property) == "function" then
-        return function(otherSelf, ...)
-            Called:Fire(key, otherSelf, ...)
-			return property(otherSelf, ...)
-		end
-    elseif property then
-        return property
-    end
-
-    property = WrappedInstance[key]
+	local Called = self._Public.Called
+	local property = self._Public[key]
 
 	if type(property) == "function" then
 		return function(otherSelf, ...)
-            Called:Fire(key, otherSelf, ...)
+			Called:Fire(key, otherSelf, ...)
+			return property(otherSelf, ...)
+		end
+	elseif property then
+		return property
+	end
+
+	property = WrappedInstance[key]
+
+	if type(property) == "function" then
+		return function(otherSelf, ...)
+			Called:Fire(key, otherSelf, ...)
 			return property(otherSelf, ...)
 		end
 	elseif property then
@@ -128,7 +128,7 @@ function WrappedInstance:__index(key: any): any?
 	if exists then
 		if type(instanceProperty) == "function" then
 			return function(_, ...)
-                Called:Fire(key, self._Instance, ...)
+				Called:Fire(key, self._Instance, ...)
 				return instanceProperty(self._Instance, ...)
 			end
 		else
@@ -140,13 +140,13 @@ function WrappedInstance:__index(key: any): any?
 end
 
 function WrappedInstance:__newindex(key: any, value: any): ()
-    local Changed = self._Public.Changed
-    local property = self._Public[key]
+	local Changed = self._Public.Changed
+	local property = self._Public[key]
 
-    if property then
-        self._Public[key] = value
-        Changed:Fire(key, property, value)
-    end
+	if property then
+		self._Public[key] = value
+		Changed:Fire(key, property, value)
+	end
 
 	local exists: boolean, instanceProperty: string | any = pcall(function()
 		return self._Instance[key]
@@ -154,7 +154,7 @@ function WrappedInstance:__newindex(key: any, value: any): ()
 
 	if exists then
 		self._Instance[key] = value
-        Changed:Fire(key, instanceProperty, value)
+		Changed:Fire(key, instanceProperty, value)
 	end
 end
 

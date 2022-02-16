@@ -22,8 +22,8 @@ Janitor[IndicesReference] = nil
 Janitor.__index = Janitor
 
 local TypeDefaults = {
-	["function"] = true;
-	RBXScriptConnection = "Disconnect";
+	["function"] = true,
+	RBXScriptConnection = "Disconnect",
 }
 
 function Janitor.Is(Object: any): boolean
@@ -47,7 +47,14 @@ function Janitor:Add<T>(Object: T, MethodName: StringOrTrue?, Index: any?): T
 
 	MethodName = MethodName or TypeDefaults[typeof(Object)] or "Destroy"
 	if type(Object) ~= "function" and not Object[MethodName] then
-		warn(string.format(METHOD_NOT_FOUND_ERROR, tostring(Object), tostring(MethodName), debug.traceback(nil :: any, 2)))
+		warn(
+			string.format(
+				METHOD_NOT_FOUND_ERROR,
+				tostring(Object),
+				tostring(MethodName),
+				debug.traceback(nil :: any, 2)
+			)
+		)
 	end
 
 	self[Object] = MethodName
@@ -62,15 +69,19 @@ function Janitor:AddPromise(PromiseObject)
 
 		if PromiseObject:getStatus() == Promise.Status.Started then
 			local Id = newproxy(false)
-			local NewPromise = self:Add(Promise.new(function(Resolve, _, OnCancel)
-				if OnCancel(function()
-					PromiseObject:cancel()
-				end) then
-					return
-				end
+			local NewPromise = self:Add(
+				Promise.new(function(Resolve, _, OnCancel)
+					if OnCancel(function()
+						PromiseObject:cancel()
+					end) then
+						return
+					end
 
-				Resolve(PromiseObject)
-			end), "cancel", Id)
+					Resolve(PromiseObject)
+				end),
+				"cancel",
+				Id
+			)
 
 			NewPromise:finallyCall(self.Remove, self, Id)
 			return NewPromise
@@ -182,7 +193,7 @@ end
 
 function RbxScriptConnection._new(RBXScriptConnection: RBXScriptConnection)
 	return setmetatable({
-		Connection = RBXScriptConnection;
+		Connection = RBXScriptConnection,
 	}, RbxScriptConnection)
 end
 
@@ -190,7 +201,9 @@ function RbxScriptConnection:__tostring()
 	return "RbxScriptConnection<" .. tostring(self.Connected) .. ">"
 end
 
-type RbxScriptConnection = typeof(RbxScriptConnection._new(game:GetPropertyChangedSignal("ClassName"):Connect(function() end)))
+type RbxScriptConnection = typeof(RbxScriptConnection._new(
+	game:GetPropertyChangedSignal("ClassName"):Connect(function() end)
+))
 
 function Janitor:LinkToInstance(Object: Instance, AllowMultiple: boolean?): RbxScriptConnection
 	local Connection
@@ -236,7 +249,7 @@ end
 
 function Janitor:LinkToInstances(...: Instance)
 	local ManualCleanup = Janitor.new()
-	for _, Object in ipairs({...}) do
+	for _, Object in ipairs({ ... }) do
 		ManualCleanup:Add(self:LinkToInstance(Object, true), "Disconnect")
 	end
 
@@ -245,8 +258,8 @@ end
 
 function Janitor.new()
 	return setmetatable({
-		CurrentlyCleaning = false;
-		[IndicesReference] = nil;
+		CurrentlyCleaning = false,
+		[IndicesReference] = nil,
 	}, Janitor)
 end
 
