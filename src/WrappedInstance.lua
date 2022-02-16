@@ -36,6 +36,22 @@ local Checks = GetChecks(WrappedInstance)
 ]=]
 
 --[=[
+    @prop Changed Signal<any, any, any>
+    @within WrappedInstance
+
+    A signal that fires when __newindex successfully sets a new value  
+    Args: propertyKey: any, lastValue: any, newValue: any
+]=]
+
+--[=[
+    @prop Called Signal<any, ...any?>
+    @within WrappedInstance
+
+    A signal that fires when a function is called from __index  
+    Args: methodKey: any, args: ...any?
+]=]
+
+--[=[
     @since v1.0.0
     @param Properties Properties<I>
     
@@ -81,7 +97,7 @@ end
     @since v1.0.0
     @return I
     
-    Makes the wrapped instance unuseable and disconnects all custom signals,
+    Makes the wrapped instance unuseable and disconnects all custom signals,  
     This will not destroy the instance itself and not disconnect normal signals.
 ]=]
 function WrappedInstance:Clean(): Instance
