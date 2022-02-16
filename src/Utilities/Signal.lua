@@ -114,10 +114,13 @@ local Signal = {}
 Signal.__index = Signal
 
 function Signal.new(janitor)
-	return setmetatable({
-		_handlerListHead = false,
-		_janitor = janitor,
-	}, Signal)
+	return janitor:Add(
+		setmetatable({
+			_handlerListHead = false,
+			_janitor = janitor,
+		}, Signal),
+		"DisconnectAll"
+	)
 end
 
 function Signal.Is(self): (boolean, string?)
@@ -139,7 +142,6 @@ end
 -- Disconnect all handlers. Since we use a linked list it suffices to clear the
 -- reference to the head handler.
 function Signal:DisconnectAll()
-	self._janitor:Cleanup()
 	self._handlerListHead = false
 end
 
