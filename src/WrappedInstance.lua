@@ -81,7 +81,8 @@ end
     @since v1.0.0
     @return I
     
-    Makes the wrapped instance unuseable.
+    Makes the wrapped instance unuseable and disconnects all custom signals,
+    This will not destroy the instance itself and not disconnect normal signals.
 ]=]
 function WrappedInstance:Clean(): Instance
 	assert(Checks.Clean(self))

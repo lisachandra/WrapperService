@@ -40,8 +40,8 @@ function WrapperService:Create<I>(Instance: I): WrappedInstance<I>
 	Wrapped._Instance = Instance
 	Wrapped._Index = #self.Instances + 1
 
-    Wrapped._Public.Changed = Wrapped._Janitor:Add(Signal.new(), "DisconnectAll") :: Signal
-    Wrapped._Public.Called = Wrapped._Janitor:Add(Signal.new(), "DisconnectAll") :: Signal
+    Wrapped._Public.Changed = Signal.new()
+    Wrapped._Public.Called = Signal.new()
 
 	Wrapped._Public.Called:Connect(function(methodKey)
         if tostring(methodKey) == "Clean" then

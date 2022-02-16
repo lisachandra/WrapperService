@@ -1,5 +1,4 @@
---[[--------------------------------[=]-------------------------------------]]
---
+--[[--------------------------------[=]-------------------------------------]]--
 --               Batched Yield-Safe Signal Implementation                     --
 -- This is a Signal class which has effectively identical behavior to a       --
 -- normal RBXScriptSignal, with the only difference being a couple extra      --
@@ -22,9 +21,8 @@
 --                                                                            --
 -- Authors:                                                                   --
 --   stravant - July 31st, 2021 - Created the file.                           --
---   lisachandra - February 12th, 2022 - Added .Is and luau types             --
---[[--------------------------------[=]-------------------------------------]]
---
+--   lisachandra - February 12th, 2022 - Added .Is, luau types and janitor    --
+--[[--------------------------------[=]-------------------------------------]]--
 
 export type Connection = {
 	Connected: boolean,
@@ -113,9 +111,10 @@ setmetatable(Connection, {
 local Signal = {}
 Signal.__index = Signal
 
-function Signal.new()
+function Signal.new(janitor)
 	return setmetatable({
 		_handlerListHead = false,
+        _janitor = janitor
 	}, Signal)
 end
 
@@ -125,7 +124,7 @@ function Signal.Is(self): (boolean, string?)
 end
 
 function Signal:Connect(fn)
-	local connection = Connection.new(self, fn)
+	local connection = self._janitor:Add(Connection.new(self, fn), "Disconnect")
 	if self._handlerListHead then
 		connection._next = self._handlerListHead
 		self._handlerListHead = connection
@@ -138,7 +137,8 @@ end
 -- Disconnect all handlers. Since we use a linked list it suffices to clear the
 -- reference to the head handler.
 function Signal:DisconnectAll()
-	self._handlerListHead = false
+	self._janitor:Cleanup()
+    self._handlerListHead = false
 end
 
 -- Signal:Fire(...) implemented by running the handler functions on the
