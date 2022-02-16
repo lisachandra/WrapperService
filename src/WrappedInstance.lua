@@ -29,7 +29,7 @@ local WrappedInstance = {}
 local Checks = GetChecks(WrappedInstance)
 
 --[=[
-    @type Properties<I> { [any]: {Property: any } | { Method: (self: WrappedInstance<I>, ...any?) -> ...any? } | { Event: (Signal: Signal) -> () } }
+    @type Properties<I> {  [any]: {Property: any  } | {  Method: (self: WrappedInstance<I>, ...any?) -> ...any?  } | {  Event: (Signal: Signal) -> () }  }
     @within WrappedInstance
 
     Properties type for ```WrappedInstance:Add``` method
@@ -39,7 +39,7 @@ local Checks = GetChecks(WrappedInstance)
     @prop Changed Signal<any, any, any>
     @within WrappedInstance
 
-    A signal that fires when __newindex successfully sets a new value  
+    A signal that fires when __newindex successfully sets a new value   
     Args: propertyKey: any, lastValue: any, newValue: any
 ]=]
 
@@ -47,7 +47,7 @@ local Checks = GetChecks(WrappedInstance)
     @prop Called Signal<any, ...any?>
     @within WrappedInstance
 
-    A signal that fires when a function is called from __index  
+    A signal that fires when a function is called from __index   
     Args: methodKey: any, args: ...any?
 ]=]
 

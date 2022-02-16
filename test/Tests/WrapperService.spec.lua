@@ -54,7 +54,7 @@ return function()
             expect(otherWorkspace._Index == (lastIndex - 1)).to.be.equal(true)
         end)
 
-        it("should destroy the WrappedInstance and disconnect all signals", function()
+        it("should destroy the WrappedInstance and disconnect all custom signals", function()
             local Workspace = WrapperService:Create(workspace)
 
             local Connection = Workspace.Called:Connect(function() end)

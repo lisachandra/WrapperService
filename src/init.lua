@@ -9,7 +9,7 @@ export type WrappedInstance<I> = WrappedInstance.WrappedInstance<I>
 --[=[
     @class WrapperService
 
-    A service that allows you to create custom properties for roblox instances  
+    A service that allows you to create custom properties for roblox instances   
     Github: [https://github.com/zxibs/WrapperService](https://github.com/zxibs/WrapperService)
 ]=]
 local WrapperService = {}
@@ -18,7 +18,8 @@ local WrapperService = {}
     @prop Instances { WrappedInstance<Instance> }
     @within WrapperService
 
-    A table containing all of the wrapped instances that have been created and not cleaned.
+    A table containing all of the wrapped instances  
+    that have been created and not cleaned.
 ]=]
 WrapperService.Instances = {} :: { WrappedInstance<Instance> }
 
@@ -64,7 +65,7 @@ end
     @param object any
     @return ( boolean, string? )
 
-    A method for checking if an object is a WrappedInstance,
+    A method for checking if an object is a WrappedInstance,  
     if it is not it will return false and an error message
 ]=]
 function WrapperService:Is(object: any): (boolean, string?)
