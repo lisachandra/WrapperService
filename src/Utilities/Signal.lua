@@ -1,4 +1,5 @@
---[[--------------------------------[=]-------------------------------------]]--
+--[[--------------------------------[=]-------------------------------------]]
+--
 --               Batched Yield-Safe Signal Implementation                     --
 -- This is a Signal class which has effectively identical behavior to a       --
 -- normal RBXScriptSignal, with the only difference being a couple extra      --
@@ -22,7 +23,8 @@
 -- Authors:                                                                   --
 --   stravant - July 31st, 2021 - Created the file.                           --
 --   lisachandra - February 12th, 2022 - Added .Is, luau types and janitor    --
---[[--------------------------------[=]-------------------------------------]]--
+--[[--------------------------------[=]-------------------------------------]]
+--
 
 export type Connection = {
 	Connected: boolean,
