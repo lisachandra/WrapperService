@@ -1,5 +1,6 @@
 local Signal = require(script.Utilities.Signal)
 local Janitor = require(script.Utilities.Janitor)
+
 local GetChecks = require(script.GetChecks)
 local WrappedInstance = require(script.WrappedInstance)
 
@@ -35,7 +36,8 @@ local Checks = GetChecks(WrapperService, true)
 function WrapperService:Create<I>(Instance: I): WrappedInstance<I>
 	assert(Checks.Create(self, Instance))
 
-	local Wrapped = { _Public = {} }
+	local Wrapped = {}
+    Wrapped._Public = {}
 
 	Wrapped._Janitor = Janitor.new()
 	Wrapped._Instance = Instance

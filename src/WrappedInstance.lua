@@ -66,33 +66,22 @@ function WrappedInstance:Add(Properties: Properties<Instance>): ()
 
 	for key, propertyContents in pairs(Properties) do
 		for valueType, value in pairs(propertyContents) do
-			local GetValues = {
-				Property = function()
-					return value
-				end,
+            if valueType == "Property" then
+                self._Public[key] = value
+            elseif valueType == "Event" then
+                local newSignal: Signal = Signal.new(self._Janitor) :: any
+                task.spawn(value, newSignal)
 
-				Event = function()
-					local newSignal: Signal = Signal.new(self._Janitor) :: any
-					task.spawn(value, newSignal)
-
-					return newSignal
-				end,
-
-				Method = function()
-					return function(otherSelf, ...)
-						if otherSelf ~= self then
-							warn(("Expected `:` not `.` while calling member function %s"):format(tostring(key)))
-						else
-							return value(otherSelf, ...)
-						end
-					end
-				end,
-			}
-
-			local GetValue = GetValues[valueType]
-			local Value = GetValue()
-
-			self._Public[key] = Value
+                self._Public[key] = newSignal
+            elseif valueType == "Method" then
+                self._Public[key] = function(otherSelf, ...)
+                    if otherSelf ~= self then
+                        warn(("Expected `:` not `.` while calling member function %s"):format(tostring(key)))
+                    else
+                        return value(otherSelf, ...)
+                    end
+                end
+            end
 		end
 	end
 end

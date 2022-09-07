@@ -48,13 +48,6 @@ jobs:
           remodel run build.lua
           cd ..
 
-      - name: Create .zip file
-        shell: bash
-        run: |
-          cd publish
-          zip -r WrapperService.zip ../src
-          cd ..
-
       - name: Create release note
         shell: bash
         run: |
@@ -62,7 +55,6 @@ jobs:
           python3 publish/get_changes.py CHANGELOG.md > publish/CHANGES.md
           cd publish
           sed -i 's|(rbxm)|(https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/WrapperService.rbxm)|' RELEASE_NOTE.md
-          sed -i 's|(zip)|(https://github.com/${{ github.repository }}/releases/download/${{ github.ref_name }}/WrapperService.zip)|' RELEASE_NOTE.md
           sed -i 's|version|${{ github.ref_name }}|' RELEASE_NOTE.md
           cat CHANGES.md >> RELEASE_NOTE.md
           cd ..
@@ -75,4 +67,3 @@ jobs:
           body_path: publish/RELEASE_NOTE.md
           files: |
               publish/WrapperService.rbxm
-              publish/WrapperService.zip
